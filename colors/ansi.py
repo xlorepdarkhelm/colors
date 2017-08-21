@@ -7,45 +7,20 @@ import typing
 from colors import RGBColor
 
 class ANSI(enum.Enum):
-    Normal = (
-        RGBColor(  0,   0,   0),  # Black
-        RGBColor(128,   0,   0),  # Red
-        RGBColor(  0, 128,   0),  # Green
-        RGBColor(128, 128,   0),  # Brown
-        RGBColor(  0,   0, 128),  # Blue
-        RGBColor(128,   0, 128),  # Magenta
-        RGBColor(  0, 128, 128),  # Cyan
-        RGBColor(192, 192, 192),  # Gray
-    )
+    Normal_Black   = RGBColor(  0,   0,   0)
+    Normal_Red     = RGBColor(128,   0,   0)
+    Normal_Green   = RGBColor(  0, 128,   0)
+    Normal_Yellow  = RGBColor(128, 128,   0)
+    Normal_Blue    = RGBColor(  0,   0, 128)
+    Normal_Magenta = RGBColor(128,   0, 128)
+    Normal_Cyan    = RGBColor(  0, 128, 128)
+    Normal_White   = RGBColor(192, 192, 192)
 
-    Bright = (
-        RGBColor(128, 128, 128),  # Darkgray
-        RGBColor(255,   0,   0),  # Red
-        RGBColor(  0, 255,   0),  # Green
-        RGBColor(255, 255,   0),  # Yellow
-        RGBColor(  0,   0, 255),  # Blue
-        RGBColor(255,   0, 255),  # Magenta
-        RGBColor(  0, 255, 255),  # Cyan
-        RGBColor(255, 255, 255),  # White
-    )
-
-    def __getitem__(self, index: int) -> RGBColor:
-        return self.value[index]
-
-    def __len__(self) -> int:
-        return len(self.value)
-
-    def __contains__(self, value: RGBColor) -> bool:
-        return value in self.value
-
-    def __iter__(self) -> typing.Iterator[RGBColor]:
-        return iter(self.value)
-
-    def __reversed__(self) -> typing.Iterator[RGBColor]:
-        return reversed(self.value)
-
-    def index(self, value: RGBColor) -> int:
-        return self.value.index(value)
-
-    def count(self, value: RGBColor) -> int:
-        return self.value.count(value)
+    Bright_Black   = RGBColor(128, 128, 128)
+    Bright_Red     = RGBColor(255,   0,   0)
+    Bright_Green   = RGBColor(  0, 255,   0)
+    Bright_Yellow  = RGBColor(255, 255,   0)
+    Bright_Blue    = RGBColor(  0,   0, 255)
+    Bright_Magenta = RGBColor(255,   0, 255)
+    Bright_Cyan    = RGBColor(  0, 255, 255)
+    Bright_White   = RGBColor(255, 255, 255)
