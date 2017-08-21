@@ -1,8 +1,4 @@
-import collections.abc
-import colorsys
 import enum
-import functools
-import typing
 
 from colors import RGBColor
 
