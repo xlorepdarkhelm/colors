@@ -1,6 +1,6 @@
 import enum
 
-from colors import RGBColor
+from colors.base import RGBColor
 
 
 class MaterialDesign(enum.Enum):

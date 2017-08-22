@@ -1,10 +1,10 @@
 import enum
 
-from colors import RGBColor
+from colors.base import RGBColor
 
 
 # http://en.wikipedia.org/wiki/Web_colors#X11_color_names
-class X11Colors(enum.Enum):
+class X11(enum.Enum):
     # Pink colors
     Pink            = RGBColor(255, 192, 203)
     LightPink       = RGBColor(255, 182, 193)

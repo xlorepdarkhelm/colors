@@ -1,9 +1,16 @@
+"""
+The :py:class:`Xterm` enumeration that contains the 256 xterm colors.
+
+This implementation allows for figuring out the "best fit" color from
+a given :py:class:`colors.RGBColor` color, returning the index number
+for that color if desired.
+"""
 import enum
 
-from colors import RGBColor
+from colors.base import RGBColor
 
 
-class XtermColors(enum.Enum):
+class Xterm(enum.Enum):
     # ANSI Colors
     Black   = RGBColor(  0,   0,   0)
     Maroon  = RGBColor(128,   0,   0)
@@ -13,7 +20,7 @@ class XtermColors(enum.Enum):
     Purple  = RGBColor(128,   0, 128)
     Teal    = RGBColor(  0, 128, 128)
     Silver  = RGBColor(192, 192, 192)
-    Grey    = RGBColor(128, 128, 128)
+    Gray    = RGBColor(128, 128, 128)
     Red     = RGBColor(255,   0,   0)
     Lime    = RGBColor(  0, 255,   0)
     Yellow  = RGBColor(255, 255,   0)
@@ -241,27 +248,27 @@ class XtermColors(enum.Enum):
     Cube_6_6_6 = RGBColor(255, 255, 255)
 
     # Grayscale
-    Grey3  = RGBColor(  8,   8,   8)
-    Grey7  = RGBColor( 18,  18,  18)
-    Grey11 = RGBColor( 28,  28,  28)
-    Grey15 = RGBColor( 38,  38,  38)
-    Grey19 = RGBColor( 48,  48,  48)
-    Grey23 = RGBColor( 58,  58,  58)
-    Grey27 = RGBColor( 68,  68,  68)
-    Grey30 = RGBColor( 78,  78,  78)
-    Grey35 = RGBColor( 88,  88,  88)
-    Grey39 = RGBColor( 98,  98,  98)
-    Grey42 = RGBColor(108, 108, 108)
-    Grey46 = RGBColor(118, 118, 118)
-    Grey50 = RGBColor(128, 128, 128)
-    Grey54 = RGBColor(138, 138, 138)
-    Grey58 = RGBColor(148, 148, 148)
-    Grey62 = RGBColor(158, 158, 158)
-    Grey66 = RGBColor(168, 168, 168)
-    Grey70 = RGBColor(178, 178, 178)
-    Grey74 = RGBColor(188, 188, 188)
-    Grey78 = RGBColor(198, 198, 198)
-    Grey82 = RGBColor(208, 208, 208)
-    Grey85 = RGBColor(218, 218, 218)
-    Grey89 = RGBColor(228, 228, 228)
-    Grey93 = RGBColor(238, 238, 238)
+    Gray3  = RGBColor(  8,   8,   8)
+    Gray7  = RGBColor( 18,  18,  18)
+    Gray11 = RGBColor( 28,  28,  28)
+    Gray15 = RGBColor( 38,  38,  38)
+    Gray19 = RGBColor( 48,  48,  48)
+    Gray23 = RGBColor( 58,  58,  58)
+    Gray27 = RGBColor( 68,  68,  68)
+    Gray30 = RGBColor( 78,  78,  78)
+    Gray35 = RGBColor( 88,  88,  88)
+    Gray39 = RGBColor( 98,  98,  98)
+    Gray42 = RGBColor(108, 108, 108)
+    Gray46 = RGBColor(118, 118, 118)
+    Gray50 = RGBColor(128, 128, 128)
+    Gray54 = RGBColor(138, 138, 138)
+    Gray58 = RGBColor(148, 148, 148)
+    Gray62 = RGBColor(158, 158, 158)
+    Gray66 = RGBColor(168, 168, 168)
+    Gray70 = RGBColor(178, 178, 178)
+    Gray74 = RGBColor(188, 188, 188)
+    Gray78 = RGBColor(198, 198, 198)
+    Gray82 = RGBColor(208, 208, 208)
+    Gray85 = RGBColor(218, 218, 218)
+    Gray89 = RGBColor(228, 228, 228)
+    Gray93 = RGBColor(238, 238, 238)

@@ -1,6 +1,6 @@
 import enum
 
-from colors import RGBColor
+from colors.base import RGBColor
 
 class ANSI(enum.Enum):
     Normal_Black   = RGBColor(  0,   0,   0)
