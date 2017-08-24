@@ -27,7 +27,7 @@ class Web(base.ColorGroup):
     colors for the web.
 
     See Also:
-        `Wikipedia <http://en.wikipedia.org/wiki/Web_colors#X11_color_names>''
+        `Wikipedia <http://en.wikipedia.org/wiki/Web_colors#X11_color_names>`
 
     """
 

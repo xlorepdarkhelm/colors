@@ -8,14 +8,14 @@ import enum
 from colors import base
 
 
-class Web(base.ColorGroup):
+class HTML(base.ColorGroup):
     """
     The color group for HTML 4.01 approved colors.
 
     These are the colors as defined in the HTML 4.01 specification from 1999.
 
     See Also:
-        `Wikipedia <https://en.wikipedia.org/wiki/Web_colors#HTML_color_names>'
+        `Wikipedia <https://en.wikipedia.org/wiki/Web_colors#HTML_color_names>`
 
     """
 
