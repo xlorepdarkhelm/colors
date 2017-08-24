@@ -1,3 +1,5 @@
+"""Base module containing the core components for the colors system."""
+
 import collections.abc
 import colorsys
 import enum
@@ -15,7 +17,21 @@ class RGBColor(
         )
     )
 ):
+    """
+    Class that defines a red/green/blue (RGB) color.
+    
+    This is a namedtuple that simply contains 3 8-bit (0-255) values that represent
+    red, green, and blue values for the color. It is possible to convert this to
+    :py:class:`HSVColor` or :py:class:`HSLColor` through conversion properties
+    (:py:meth:`hsv` & :py:meth:`hsl` respectively).
+    
+    Attributes:
+        red (int): An integer value from 0-255 representing the red level for the color.
+        green (int): An integer value from 0-255 representing the green level for the color.
+        blue (int): An integer value from 0-255 representing the blue level for the color.
+    """
     def __new__(cls, red: int, green: int, blue: int) -> 'RGBColor':
+        """Validate that the red, green, and blue colors are in the correct range."""
         red, green, blue = int(red), int(green), int(blue)
         red_good = 0 <= red <= 255
         green_good = 0 <= green <= 255
@@ -29,6 +45,7 @@ class RGBColor(
 
     @property
     def hsv(self) -> 'HSVColor':
+        """The HSV translation of this color."""
         self.__hsv: HSVColor
         try:
             return self.__hsv
@@ -38,6 +55,7 @@ class RGBColor(
 
     @property
     def hsl(self) -> 'HSLColor':
+        """The HSL translation of this color.
         self.__hsl: HSLColor
         try:
             return self.__hsl
@@ -48,6 +66,7 @@ class RGBColor(
     @classmethod
     @functools.lru_cache(maxsize=128)
     def from_hsv(cls, hsv: 'HSVColor') -> 'RGBColor':
+        """Convert the HSVColor to RGBColor."""
         red, green, blue = colorsys.hsv_to_rgb(
             hsv.hue / 360,
             hsv.saturation / 100,
@@ -58,6 +77,7 @@ class RGBColor(
     @classmethod
     @functools.lru_cache(maxsize=128)
     def from_hsl(cls, hsl: 'HSLColor') -> 'RGBColor':
+        """Convert the HSLColor to RGBColor."""
         red, green, blue = colorsys.hls_to_rgb(
             hsl.hue / 360,
             hsl.lightness / 100,
@@ -66,6 +86,7 @@ class RGBColor(
         return cls(int(red * 255), int(green * 255), int(blue * 255))
 
     def __str__(self) -> str:
+        """Convert this RGBColor into web/hex notation string format."""
         self.__str: str
         try:
             return self.__str
@@ -76,6 +97,7 @@ class RGBColor(
     @classmethod
     @functools.lru_cache(maxsize=128)
     def from_str(cls, web_str: str) -> 'RGBColor':
+        """Convert the web/hex notation string into RGBColor."""
         try:
             if web_str[0] == '#':
                 web_str = web_str[1:]
@@ -104,7 +126,25 @@ class HSVColor(
         )
     )
 ):
+    """
+    Class that defines a hue/saturation/value (HSV) color.
+    
+    HSV is a common cylendrical-coordinate representation of colors. This form for colors is an attempt
+    to make it easier to perceive the colors in a more three-dimensional model, often used by color pickers and
+    television broadcasts.
+    
+    Attributes:
+        hue (int): An integer value from 0-359 representing an angle of rotation in the color cylender.
+            Each value represents a different color hue. If the colors go below 0, they are automatically wrapped
+            around (add 360 to the value) to know the true value. Likewise, if they exceed 359, they are wrapped
+            (subtract 360 from the value) to know the true value.
+        saturation (int): An integer value from 0-100 representing the color saturation for the given hue. A lower
+            value results in less color (more gray), while a higher value results in more color (less gray) being shown.
+        value (int): An integer value from 0-100 representing the brightness of the color. Lower values approach black,
+            while higher values approach the brightest color.
+    """
     def __new__(cls, hue: int, saturation: int, value: int) -> 'HSVColor':
+        """Validate that the hue, saturation, and value integers are in the correct range."""
         hue, saturation, value = int(hue), int(saturation), int(value)
         while hue >= 360:
             hue -= 360
@@ -121,6 +161,7 @@ class HSVColor(
 
     @property
     def rgb(self) -> 'RGBColor':
+        """The RGB translation of this color."""
         self.__rgb: RGBColor
         try:
             return self.__rgb
@@ -130,6 +171,7 @@ class HSVColor(
 
     @property
     def hsl(self) -> 'HSLColor':
+        """The HSL translation of this color."""
         self.__hsl: HSLColor
         try:
             return self.__hsl
@@ -140,6 +182,7 @@ class HSVColor(
     @classmethod
     @functools.lru_cache(maxsize=128)
     def from_rgb(cls, rgb: 'RGBColor') -> 'HSVColor':
+        """Convert the RGBColor to HSVColor."""
         hue, saturation, value = colorsys.rgb_to_hsv(
             rgb.red / 255,
             rgb.green / 255,
