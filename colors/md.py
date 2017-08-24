@@ -1,9 +1,37 @@
+"""Contains the implementation of the Material Design color group."""
+__all__ = (
+    'MaterialDesign',
+)
+
 import enum
 
 from colors import base
 
 
 class MaterialDesign(base.ColorGroup):
+    """
+    The color group for Google's Material Design.
+
+    These are the colors that are available in Google's Material Design
+    specification. Colors are divided into 10 separate shades (50-900) with
+    most having four "accent" shades (A100, A200, A400, and A700).
+
+    Note:
+        (from Google's page)
+
+        This color palette comprises primary and accent colors that can be
+        used for illustration or to develop your brand colors. They’ve been
+        designed to work harmoniously with each other. The color palette
+        starts with primary colors and fills in the spectrum to create a
+        complete and usable palette for Android, Web, and iOS. Google
+        suggests using the 500 colors as the primary colors in your app and
+        the other colors as accents colors.
+
+    See Also:
+        `MD Style - Color <https://material.io/guidelines/style/color.html>`
+
+    """
+
     Red_50   = base.RGBColor(255, 235, 238)
     Red_100  = base.RGBColor(255, 205, 210)
     Red_200  = base.RGBColor(239, 154, 154)

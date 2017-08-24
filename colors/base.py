@@ -358,7 +358,10 @@ class ColorGroup(enum.Enum):
 
     @classmethod
     @functools.lru_cache(maxsize=128)
-    def closest(cls, color: typing.Union[ColorGroup, RGBColor]) -> ColorGroup:
+    def closest(
+        cls,
+        color: typing.Union['ColorGroup', RGBColor]
+    ) -> 'ColorGroup':
         """Find the closest match in this color group to the given color."""
         try:
             rgb = color.value  # type: ignore

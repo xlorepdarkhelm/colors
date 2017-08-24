@@ -1,10 +1,36 @@
+"""Contains the implementation of the named Web colors used by browsers."""
+__all__ = (
+    'Web',
+)
+
 import enum
 
 from colors import base
 
 
-# http://en.wikipedia.org/wiki/Web_colors#X11_color_names
-class X11(base.ColorGroup):
+class Web(base.ColorGroup):
+    """
+    The standard named web color group.
+
+    A number of colors are defined by web browsers. A particular browser may
+    not recognize all of these colors, but as of 2005 all modern,
+    general-use, graphical browsers support the full list of colors. Many of
+    these colors are from the list of X11 color names distributed with the X
+    Window System. These colors were standardized by SVG 1.0, and are
+    accepted by SVG Full user agents. They are not part of SVG Tiny.
+
+    The list of colors shipped with the X11 product varies between
+    implementations, and clashes with certain of the HTML names such as
+    green. X11 colors are defined as simple RGB (hence, no particular color
+    space), rather than sRGB. This means that the list of colors found in X11
+    (e.g., in /usr/lib/X11/rgb.txt) should not directly be used to choose
+    colors for the web.
+
+    See Also:
+        `Wikipedia <http://en.wikipedia.org/wiki/Web_colors#X11_color_names>''
+
+    """
+
     # Pink colors
     Pink            = base.RGBColor(255, 192, 203)
     LightPink       = base.RGBColor(255, 182, 193)

@@ -1,10 +1,4 @@
-"""
-The :py:class:`Xterm` enumeration that contains the 256 xterm colors.
-
-This implementation allows for figuring out the "best fit" color from
-a given :py:class:`colors.base.RGBColor` color, returning the index number
-for that color if desired.
-"""
+"""Contains the implementation of the xterm (256) color group."""
 import enum
 import functools
 
@@ -12,6 +6,19 @@ from colors import base
 
 
 class Xterm(base.ColorGroup):
+    """
+    The xterm (256) color group.
+
+    These are the colors defined for the 256-color group first implemented
+    for use in the xterm terminal emulator, but later used in many other
+    terminal emulation programs. The index value for these colors is of
+    particular use as it is used in ANSI excape sequences to provide more
+    color depth than :py:class:`colors.ANSI` is capable of.
+
+    See Also:
+        `Wikipedia <https://en.wikipedia.org/wiki/Xterm#Protocols>`
+    """
+
     # ANSI Colors
     Black   = base.RGBColor(  0,   0,   0)
     Maroon  = base.RGBColor(128,   0,   0)
