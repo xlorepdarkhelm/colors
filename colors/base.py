@@ -29,6 +29,7 @@ class RGBColor(
 
     @property
     def hsv(self) -> 'HSVColor':
+        self.__hsv: HSVColor
         try:
             return self.__hsv
         except AttributeError:
@@ -37,6 +38,7 @@ class RGBColor(
 
     @property
     def hsl(self) -> 'HSLColor':
+        self.__hsl: HSLColor
         try:
             return self.__hsl
         except AttributeError:
@@ -64,6 +66,7 @@ class RGBColor(
         return cls(int(red * 255), int(green * 255), int(blue * 255))
 
     def __str__(self) -> str:
+        self.__str: str
         try:
             return self.__str
         except AttributeError:
@@ -118,6 +121,7 @@ class HSVColor(
 
     @property
     def rgb(self) -> 'RGBColor':
+        self.__rgb: RGBColor
         try:
             return self.__rgb
         except AttributeError:
@@ -126,6 +130,7 @@ class HSVColor(
 
     @property
     def hsl(self) -> 'HSLColor':
+        self.__hsl: HSLColor
         try:
             return self.__hsl
         except AttributeError:
@@ -169,6 +174,7 @@ class HSLColor(
             )
     @property
     def rgb(self) -> 'RGBColor':
+        self.__rgb: RGBColor
         try:
             return self.__rgb
         except AttributeError:
@@ -177,10 +183,11 @@ class HSLColor(
 
     @property
     def hsv(self) -> 'HSVColor':
+        self.__hsv: HSVColor
         try:
             return self.__hsv
         except AttributeError:
-            self.__hsv = self.rgb.hsv
+            self.__hsv = self.rgb.hsv  # type: ignore
             return self.__hsv
 
     @classmethod
@@ -197,7 +204,7 @@ class HSLColor(
 class ColorGroup(enum.Enum):
     @classmethod
     @functools.lru_cache(maxsize=128)
-    def closest(cls, rgb: RGBColor) -> int:
+    def closest(cls, rgb: RGBColor) -> ColorGroup:
         try:
             return cls(rgb)
         except ValueError:
@@ -209,8 +216,9 @@ class ColorGroup(enum.Enum):
                 )): item
                 for item in reversed(cls)
             }
-            return distances[min(distances.keys())]
+            return distances[min(distances.keys())]  # type: ignore
 
+    @property
     def index(self):
         try:
             return self.__index
