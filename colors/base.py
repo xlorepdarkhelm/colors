@@ -211,20 +211,11 @@ class ColorGroup(enum.Enum):
             }
             return distances[min(distances.keys())]
 
-
-class ColorEnumMeta(enum.EnumMeta):
-    @functools.lru_cache(maxsize=128)
-    def closest(cls, rgb: RGBColor) -> int:
+    def index(self):
         try:
-            return cls(rgb)
-        except ValueError:
-            distances = {
-                sum((
-                    abs(item.value.red - rgb.red),
-                    abs(item.value.green - rgb.green),
-                    abs(item.value.blue - rgb.blue)
-                )): item
-                for item in reversed(cls)
-            }
-            return distances[min(distances.keys())]
-
+            return self.__index
+        except AttributeError:
+            self.__index = tuple(
+                type(self).__members__.keys()
+            ).index(self.name)
+            return self.__index
