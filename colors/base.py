@@ -194,6 +194,24 @@ class HSLColor(
         return cls(int(hue * 360), int(saturation * 100), int(lightness * 100))
 
 
+class ColorGroup(enum.Enum):
+    @classmethod
+    @functools.lru_cache(maxsize=128)
+    def closest(cls, rgb: RGBColor) -> int:
+        try:
+            return cls(rgb)
+        except ValueError:
+            distances = {
+                sum((
+                    abs(item.value.red - rgb.red),
+                    abs(item.value.green - rgb.green),
+                    abs(item.value.blue - rgb.blue)
+                )): item
+                for item in reversed(cls)
+            }
+            return distances[min(distances.keys())]
+
+
 class ColorEnumMeta(enum.EnumMeta):
     @functools.lru_cache(maxsize=128)
     def closest(cls, rgb: RGBColor) -> int:

@@ -3,7 +3,7 @@ import enum
 from colors import base
 
 
-class MaterialDesign(enum.Enum, metaclass=base.ColorEnumMeta):
+class MaterialDesign(base.ColorGroup):
     Red_50   = base.RGBColor(255, 235, 238)
     Red_100  = base.RGBColor(255, 205, 210)
     Red_200  = base.RGBColor(239, 154, 154)

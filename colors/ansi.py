@@ -2,7 +2,7 @@ import enum
 
 from colors import base
 
-class ANSI(enum.Enum, metaclass=base.ColorEnumMeta):
+class ANSI(base.ColorGroup):
     Normal_Black   = base.RGBColor(  0,   0,   0)
     Normal_Red     = base.RGBColor(128,   0,   0)
     Normal_Green   = base.RGBColor(  0, 128,   0)

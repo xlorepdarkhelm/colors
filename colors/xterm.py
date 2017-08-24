@@ -11,7 +11,7 @@ import functools
 from colors import base
 
 
-class Xterm(enum.Enum, metaclass=base.ColorEnumMeta):
+class Xterm(base.ColorGroup):
     # ANSI Colors
     Black   = base.RGBColor(  0,   0,   0)
     Maroon  = base.RGBColor(128,   0,   0)

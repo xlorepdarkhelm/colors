@@ -4,7 +4,7 @@ from colors import base
 
 
 # http://en.wikipedia.org/wiki/Web_colors#X11_color_names
-class X11(enum.Enum, metaclass=base.ColorEnumMeta):
+class X11(base.ColorGroup):
     # Pink colors
     Pink            = base.RGBColor(255, 192, 203)
     LightPink       = base.RGBColor(255, 182, 193)
