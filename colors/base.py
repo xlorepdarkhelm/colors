@@ -201,7 +201,25 @@ class HSLColor(
         )
     )
 ):
+    """
+    Class that defines a hue/saturation/lightness (HSL) color.
+    
+    HSL is a common cylendrical-coordinate representation of colors. This form for colors is an attempt
+    to make it easier to perceive the colors in a more three-dimensional model, often used by color pickers and
+    television broadcasts.
+    
+    Attributes:
+        hue (int): An integer value from 0-359 representing an angle of rotation in the color cylender.
+            Each value represents a different color hue. If the colors go below 0, they are automatically wrapped
+            around (add 360 to the value) to know the true value. Likewise, if they exceed 359, they are wrapped
+            (subtract 360 from the value) to know the true value.
+        saturation (int): An integer value from 0-100 representing the color saturation for the given hue. A lower
+            value results in less color (more gray), while a higher value results in more color (less gray) being shown.
+        lightness (int): An integer value from 0-100 representing the lightness of the color. Lower values approach black,
+            while higher values approach white.
+    """
     def __new__(cls, hue: int, saturation: int, lightness: int) -> 'HSLColor':
+        """Validate that the hue, saturation, and lightness integers are in the correct range."""
         hue, saturation, lightness = int(hue), int(saturation), int(lightness)
         while hue >= 360:
             hue -= 360
@@ -217,6 +235,7 @@ class HSLColor(
             )
     @property
     def rgb(self) -> 'RGBColor':
+        """The RGB translation of this color."""
         self.__rgb: RGBColor
         try:
             return self.__rgb
@@ -226,6 +245,7 @@ class HSLColor(
 
     @property
     def hsv(self) -> 'HSVColor':
+        """The HSV translation of this color."""
         self.__hsv: HSVColor
         try:
             return self.__hsv
@@ -236,7 +256,8 @@ class HSLColor(
     @classmethod
     @functools.lru_cache(maxsize=128)
     def from_rgb(cls, rgb: 'RGBColor') -> 'HSLColor':
-        hue, lightness, saturation = colorsys.rgb_to_hls(
+        """Convert the RGBColor to HSLColor."""
+         hue, lightness, saturation = colorsys.rgb_to_hls(
             rgb.red / 255,
             rgb.green / 255,
             rgb.blue / 255,
@@ -245,9 +266,17 @@ class HSLColor(
 
 
 class ColorGroup(enum.Enum):
+    """
+    Base class used to implement color groups.
+    
+    Color groups are defined as Enums of named :py:class:`RGBColor` values. The purpose
+    of these is to logically manage colors more easily, as well as provide a mechanism to
+    convert a color from one system to the closest color of another system in a simple way.
+    """
     @classmethod
     @functools.lru_cache(maxsize=128)
     def closest(cls, rgb: RGBColor) -> ColorGroup:
+        """Find the color in this group that most closely matches the given :py:class:`RGBColor`."""
         try:
             return cls(rgb)
         except ValueError:
@@ -263,6 +292,7 @@ class ColorGroup(enum.Enum):
 
     @property
     def index(self):
+        """Returns the numerical index value for color in this group."""
         try:
             return self.__index
         except AttributeError:
