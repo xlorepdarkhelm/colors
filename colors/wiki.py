@@ -21,11 +21,11 @@ management systems built into operating systems and image editing software
 attempt such conversions as accurately as possible.
 
     See Also:
-        Wikipedia:
+        Wikipedia List of Colors
         
-        * `A-F <https://https://en.wikipedia.org/wiki/List_of_colors:_A%E2%80%93F`
-        * `G-M <https://https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M`
-        * `N-Z <https://https://en.wikipedia.org/wiki/List_of_colors:_N%E2%80%93Z`
+        * `https://https://en.wikipedia.org/wiki/List_of_colors:_A%E2%80%93F`
+        * `https://https://en.wikipedia.org/wiki/List_of_colors:_G%E2%80%93M`
+        * `https://https://en.wikipedia.org/wiki/List_of_colors:_N%E2%80%93Z`
 
     """
 
@@ -100,3 +100,24 @@ attempt such conversions as accurately as possible.
     AzureWebColor      = base.RGBColor(240, 255, 255)
     AzureMist          = base.RGBColor(240, 255, 255)
     AzureishWhite      = base.RGBColor(219, 233, 244)
+
+    BabyBlue           = base.RGBColor(137, 207, 240)
+    BabyBlueEyes       = base.RGBColor(161, 202, 241)
+    BabyPink           = base.RGBColor(244, 194, 194)
+    BabyPowder         = base.RGBColor(254, 254, 250)
+    BakerMillerPink    = base.RGBColor(255, 145, 175)
+    BallBlue           = base.RGBColor( 33, 171, 205)
+    BananaMania        = base.RGBColor(250, 231, 181)
+    BananaYellow       = base.RGBColor(255, 225,  53)
+    BangladeshGreen    = base.RGBColor(  0, 106,  78)
+    BarbiePink         = base.RGBColor(224,  33, 138)
+    BarnRed            = base.RGBColor(124,  10,   2)
+    BatteryChargedBlue = base.RGBColor( 29, 172, 214)
+    BattleshipGrey     = base.RGBColor(132, 132, 130)
+    Bazaar             = base.RGBColor(152, 119, 123)
+    BeauBlue           = base.RGBColor(188, 212, 230)
+    Beaver             = base.RGBColor(159, 129, 112)
+    Begonia            = base.RGBColor(250, 110, 121)
+    Beige              = base.RGBColor(245, 245, 220)
+    BdazzledBlue       = base.RGBColor( 46,  88, 148)
+    BigDipORuby        = base.RGBColor(156,  37,  66)
