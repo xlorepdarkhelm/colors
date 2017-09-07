@@ -1165,3 +1165,14 @@ attempt such conversions as accurately as possible.
     PurplePlum             = base.RGBColor(156,  81, 182)
     PurpleTaupe            = base.RGBColor( 80,  64,  77)
     Purpureus              = base.RGBColor(154,  78, 174)
+
+    Quartz              = base.RGBColor( 81,  72,  79)
+    QueenBlue           = base.RGBColor( 67, 107, 149)
+    QueenPink           = base.RGBColor(232, 204, 215)
+    QuickSilver         = base.RGBColor(166, 166, 166)
+    QuinacridoneMagenta = base.RGBColor(142,  58,  89)
+    Quincy              = base.RGBColor(106,  84,  69)
+    
+    Rackley     = base.RGBColor( 93, 138, 168)
+    RadicalRed  = base.RGBColor(255,  53,  94)
+    RaisinBlack = base.RGBColor( 36,  33,  36)
