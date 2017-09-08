@@ -379,14 +379,3 @@ class ColorGroup(enum.Enum):
                 for item in reversed(cls)
             }
             return distances[min(distances.keys())]  # type: ignore
-
-    @property
-    def index(self):
-        """Index value for color in this group."""
-        try:
-            return self.__index
-        except AttributeError:
-            self.__index = tuple(
-                type(self).__members__.keys()
-            ).index(self.name)
-            return self.__index
