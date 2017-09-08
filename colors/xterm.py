@@ -280,3 +280,14 @@ class Xterm(base.ColorGroup):
     Gray85 = base.RGBColor(218, 218, 218)
     Gray89 = base.RGBColor(228, 228, 228)
     Gray93 = base.RGBColor(238, 238, 238)
+
+    @property
+    def index(self):
+        """Index value for color in this group."""
+        try:
+            return self.__index
+        except AttributeError:
+            self.__index = tuple(
+                type(self).__members__.keys()
+            ).index(self.name)
+            return self.__index
