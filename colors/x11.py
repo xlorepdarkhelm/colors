@@ -758,3 +758,14 @@ class X11(base.ColorGroup):
     Grey98  = base.RGBColor(250, 250, 250)
     Grey99  = base.RGBColor(252, 252, 252)
     Grey100 = base.RGBColor(255, 255, 255)
+
+    @property
+    def index(self):
+        """Index value for color in this group."""
+        try:
+            return self.__index
+        except AttributeError:
+            self.__index = tuple(
+                type(self).__members__.keys()
+            ).index(self.name)
+            return self.__index
