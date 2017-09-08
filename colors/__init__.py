@@ -13,6 +13,7 @@ __all__ = (
     'ANSI',
     'HTML',
     'Web',
+    'Wiki',
     'Xterm',
     'MaterialDesign',
 )
@@ -24,3 +25,4 @@ from .web import Web
 from .xterm import Xterm
 from .x11 import X11
 from .md import MaterialDesign
+from .wiki import Wiki
