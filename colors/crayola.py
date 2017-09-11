@@ -25,6 +25,7 @@ class Crayola(base.ColorGroup):
 
     """
 
+    # Standard Colors
     Red                    = base.RGBColor(237,  10,  63)
     DarkRed                = base.RGBColor(195,  33,  72)
     Maroon                 = base.RGBColor(195,  33,  72)
@@ -245,6 +246,7 @@ class Crayola(base.ColorGroup):
     BlueGray               = base.RGBColor(200, 200, 205)
     White                  = base.RGBColor(255, 255, 255)
 
+    # Fluorescent
     RadicalRed       = base.RGBColor(255,  53,  94)
     WildWatermelon   = base.RGBColor(253,  91, 120)
     UltraRed         = base.RGBColor(253,  91, 120)
@@ -270,6 +272,7 @@ class Crayola(base.ColorGroup):
     HotMagenta2      = base.RGBColor(255,   0, 204)
     PurplePizzazz    = base.RGBColor(255,   0, 204)
 
+    # Silver Swirls
     AztecGold        = base.RGBColor(195, 153,  83)
     BurnishedBrown   = base.RGBColor(161, 122, 116)
     CeruleanFrost    = base.RGBColor(109, 155, 195)
@@ -295,6 +298,7 @@ class Crayola(base.ColorGroup):
     TwilightLavender = base.RGBColor(138,  73, 107)
     WintergreenDream = base.RGBColor( 86, 136, 125)
 
+    # Magic Scent
     BabyPowder    = base.RGBColor(255, 255, 255)
     Banana        = base.RGBColor(254, 216,  93)
     Blueberry     = base.RGBColor( 69, 112, 230)
@@ -323,3 +327,21 @@ class Crayola(base.ColorGroup):
     Soap          = base.RGBColor(195, 205, 230)
     Strawberry    = base.RGBColor(255,  51, 153)
     Tulip         = base.RGBColor(255, 136,  51)
+
+    # Gem Tones
+    Amethyst    = base.RGBColor(100,  96, 154)
+    Citrine     = base.RGBColor(147,  55,   9)
+    Emerald     = base.RGBColor( 20, 169, 137)
+    Jade        = base.RGBColor( 70, 154, 132)
+    Jasper      = base.RGBColor(208,  83,  64)
+    LapisLazuli = base.RGBColor( 67, 108, 185)
+    Malachite   = base.RGBColor( 70, 148, 150)
+    Moonstone   = base.RGBColor( 58, 168, 193)
+    Onyx        = base.RGBColor( 53,  56,  57)
+    Peridot     = base.RGBColor(171, 173,  72)
+    PinkPearl   = base.RGBColor(176, 112, 128)
+    RoseQuartz  = base.RGBColor(189,  85, 156)
+    Ruby        = base.RGBColor(170,  64, 105)
+    Sapphire    = base.RGBColor( 45,  93, 161)
+    SmokeyTopaz = base.RGBColor(131,  42,  13)
+    TigersEye   = base.RGBColor(181, 105,  23)
