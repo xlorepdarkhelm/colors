@@ -449,3 +449,5 @@ class Crayola(base.ColorGroup):
     ShimmeringBlush     = base.RGBColor(217, 134, 149)
     SonicSilver         = base.RGBColor(117, 117, 117)
     SteelBlue           = base.RGBColor(  0, 129, 171)
+
+    # Metallic FX
