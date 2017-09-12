@@ -511,3 +511,13 @@ class Crayola(base.ColorGroup):
     YosemiteCampfire  = base.RGBColor(237,  76,  68)
     YosemiteCampfire1 = base.RGBColor(239, 142,  48)
     YosemiteCampfire2 = base.RGBColor(169,  94,  52)
+
+    # True to Life
+    FieryRose      = base.RGBColor(255,  84, 112)
+    SizzlingSunset = base.RGBColor(255, 219,   0)
+    HeatWave       = base.RGBColor(255, 122,   0)
+    LemonGlacier   = base.RGBColor(253, 255,   0)
+    SpringFrost    = base.RGBColor(135, 255,  42)
+    AbsoluteZero   = base.RGBColor(  0,  72, 186)
+    WinterSky      = base.RGBColor(255,   0, 124)
+    Frostbite      = base.RGBColor(233,  54, 167)
