@@ -413,3 +413,6 @@ class Crayola(base.ColorGroup):
     WarmAndFuzzy        = base.RGBColor(255, 138, 186)
     WarmAndFuzzy1       = base.RGBColor(255, 117,  56)
     WarmAndFuzzy2       = base.RGBColor( 31, 117, 254)
+
+    # Pearl Brite
+    AquaPearl = base.RGBColor( 95, 190, 215)
