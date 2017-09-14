@@ -8,23 +8,7 @@ import colormath
 
 
 class sRGBColor(colormath.color_objects.sRGBColor):
-    """
-    Class that defines a red/green/blue (RGB) color.
-
-    This is a namedtuple that simply contains 3 8-bit (0-255) values that
-    represent red, green, and blue values for the color. It is possible to
-    convert this to :py:class:`HSVColor` or :py:class:`HSLColor` through
-    conversion properties (:py:meth:`hsv` & :py:meth:`hsl` respectively).
-
-    Attributes:
-        red (int): An integer value from 0-255 representing the red level for
-            the color.
-        green (int): An integer value from 0-255 representing the green level
-            for the color.
-        blue (int): An integer value from 0-255 representing the blue level
-            for the color.
-
-    """
+    """Class that defines a red/green/blue (RGB) color."""
     @property
     def hsv(self) -> 'HSVColor':
         """HSV translation of this color."""
@@ -44,44 +28,20 @@ class sRGBColor(colormath.color_objects.sRGBColor):
         except AttributeError:
             self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
             return self.__hsl
+        
+    @property
+    def lab(self) -> 'LabColor':
+        """CIE Lab translation of this color."""
+        self.__lab: LabColor
+        try:
+            return self.__lab
+        except AttributeError:
+            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
+            return self.__lab
 
-    @classmethod
-    @functools.lru_cache(maxsize=128)
-    def from_str(cls, hex_str: str) -> 'sRGBColor':
-        """Convert the web/hex notation string into sRGBColor."""
-        return cls.new_from_rgb_hex(hex_str)
-    
-    def __str__(self):
-        return self.get_rgb_hex()
-
-
+        
 class HSVColor(colormath.color_objects.HSVColor):
-    """
-    Class that defines a hue/saturation/value (HSV) color.
-
-    HSV is a common cylendrical-coordinate representation of colors. This
-    form for colors is an attempt to make it easier to perceive the colors
-    in a more three-dimensional model, often used by color pickers and
-    television broadcasts. It is possible to convert this to
-    :py:class:`sRGBColor` or :py:class:`HSLColor` through conversion
-    properties (:py:meth:`srgb` & :py:meth:`hsl` respectively).
-
-    Attributes:
-        hue (int): An integer value from 0-359 representing an angle of
-            rotation in the color cylender. Each value represents a different
-            color hue. If the colors go below 0, they are automatically
-            wrapped around (add 360 to the value) to know the true value.
-            Likewise, if they exceed 359, they are wrapped (subtract 360 from
-            the value) to know the true value.
-        saturation (int): An integer value from 0-100 representing the color
-            saturation for the given hue. A lower value results in less color
-            (more gray), while a higher value results in more color (less
-            gray) being shown.
-        value (int): An integer value from 0-100 representing the brightness
-            of the color. Lower values approach black, while higher values
-            approach the brightest color.
-
-    """
+    """Class that defines a hue/saturation/value (HSV) color."""
 
     @property
     def srgb(self) -> 'sRGBColor':
@@ -102,34 +62,20 @@ class HSVColor(colormath.color_objects.HSVColor):
         except AttributeError:
             self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
             return self.__hsl
+        
+    @property
+    def lab(self) -> 'LabColor':
+        """CIE Lab translation of this color."""
+        self.__lab: LabColor
+        try:
+            return self.__lab
+        except AttributeError:
+            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
+            return self.__lab
 
+        
 class HSLColor(colormath.color_objects.HSLColor):
-    """
-    Class that defines a hue/saturation/lightness (HSL) color.
-
-    HSL is a common cylendrical-coordinate representation of colors. This
-    form for colors is an attempt to make it easier to perceive the colors
-    in a more three-dimensional model, often used by color pickers and
-    television broadcasts. It is possible to convert this to
-    :py:class:`sRGBColor` or :py:class:`HSVColor` through conversion
-    properties (:py:meth:`rgb` & :py:meth:`hsv` respectively).
-
-    Attributes:
-        hue (int): An integer value from 0-359 representing an angle of
-            rotation in the color cylender. Each value represents a different
-            color hue. If the colors go below 0, they are automatically
-            wrapped around (add 360 to the value) to know the true value.
-            Likewise, if they exceed 359, they are wrapped (subtract 360 from
-            the value) to know the true value.
-        saturation (int): An integer value from 0-100 representing the color
-            saturation for the given hue. A lower value results in less color
-            (more gray), while a higher value results in more color (less
-            gray) being shown.
-        lightness (int): An integer value from 0-100 representing the
-            lightness of the color. Lower values approach black, while higher
-            values approach white.
-
-    """
+    """Class that defines a hue/saturation/lightness (HSL) color."""
     @property
     def srgb(self) -> 'sRGBColor':
         """sRGB translation of this color."""
@@ -149,6 +95,48 @@ class HSLColor(colormath.color_objects.HSLColor):
         except AttributeError:
             self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
             return self.__hsv
+        
+    @property
+    def lab(self) -> 'LabColor':
+        """CIE Lab translation of this color."""
+        self.__lab: LabColor
+        try:
+            return self.__lab
+        except AttributeError:
+            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
+            return self.__lab
+        
+class LabColor(colormath.color_objects.LabColor):
+    """Class that represents a CIE Lab color."""
+    @property
+    def srgb(self) -> 'sRGBColor':
+        """sRGB translation of this color."""
+        self.__srgb: sRGBColor
+        try:
+            return self.__srgb
+        except AttributeError:
+            self.__srgb = colormath.color_conversions.convert_color(self, sRGBColor)
+            return self.__srgb
+
+    @property
+    def hsv(self) -> 'HSVColor':
+        """HSV translation of this color."""
+        self.__hsv: HSVColor
+        try:
+            return self.__hsv
+        except AttributeError:
+            self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
+            return self.__hsv
+        
+    @property
+    def hsl(self) -> 'HSLColor':
+        """HSL translation of this color."""
+        self.__hsl: HSLColor
+        try:
+            return self.__hsl
+        except AttributeError:
+            self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
+            return self.__hsl
 
 
 class ColorGroup(enum.Enum):
