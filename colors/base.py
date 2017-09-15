@@ -7,7 +7,29 @@ import typing
 import colormath
 
 
-class sRGBColor(colormath.color_objects.sRGBColor):
+class ColorMeta(type):
+    @property
+    def instances(cls):
+        try:
+            return cls.__instances
+        except AttributeError:
+            cls.__instances = {}
+            return cls.__instances
+        
+    def __call__(cls, *args, **kwargs):
+        sig = inspect.signature(cls.__init__)
+        ba = sig.bind(*args, **kwargs)
+        ba.apply_defaults()
+        arg_dict = ba.arguments()
+        arguments = tuple(arg_dict.items())
+        try:
+            return cls.instances[arguments]
+        except KeyError:
+            cls.instances[arguments] = super().__call__(*args, **kwargs)
+            return cls.instances[arguments]
+
+
+class sRGBColor(colormath.color_objects.sRGBColor, metaclass=ColorMeta):
     """Class that defines a red/green/blue (RGB) color."""
     @property
     def hsv(self) -> 'HSVColor':
@@ -40,7 +62,7 @@ class sRGBColor(colormath.color_objects.sRGBColor):
             return self.__lab
 
         
-class HSVColor(colormath.color_objects.HSVColor):
+class HSVColor(colormath.color_objects.HSVColor, metaclass=ColorMeta):
     """Class that defines a hue/saturation/value (HSV) color."""
 
     @property
@@ -74,7 +96,7 @@ class HSVColor(colormath.color_objects.HSVColor):
             return self.__lab
 
         
-class HSLColor(colormath.color_objects.HSLColor):
+class HSLColor(colormath.color_objects.HSLColor, metaclass=ColorMeta):
     """Class that defines a hue/saturation/lightness (HSL) color."""
     @property
     def srgb(self) -> 'sRGBColor':
@@ -106,7 +128,7 @@ class HSLColor(colormath.color_objects.HSLColor):
             self.__lab = colormath.color_conversions.convert_color(self, LabColor)
             return self.__lab
         
-class LabColor(colormath.color_objects.LabColor):
+class LabColor(colormath.color_objects.LabColor, metaclass=ColorMeta):
     """Class that represents a CIE Lab color."""
     @property
     def srgb(self) -> 'sRGBColor':
