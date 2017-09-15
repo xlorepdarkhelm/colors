@@ -17,7 +17,7 @@ class ColorMeta(type):
             return cls.__instances
         
     def __call__(cls, *args, **kwargs):
-        sig = inspect.signature(cls.__init__)
+        sig = inspect.signature(cls.__new__)
         ba = sig.bind(*args, **kwargs)
         ba.apply_defaults()
         arg_dict = ba.arguments()
@@ -25,7 +25,7 @@ class ColorMeta(type):
         try:
             return cls.instances[arguments]
         except KeyError:
-            cls.instances[arguments] = super().__call__(*args, **kwargs)
+            cls.instances[arguments] = cls.__new__(*args, **kwargs)
             return cls.instances[arguments]
 
 
