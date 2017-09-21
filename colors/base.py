@@ -8,6 +8,8 @@ import colormath
 
 
 class ColorMeta(type):
+    __class_registry = {}
+    
     @property
     def instances(cls):
         try:
@@ -15,6 +17,41 @@ class ColorMeta(type):
         except AttributeError:
             cls.__instances = {}
             return cls.__instances
+
+    @staticmethod
+    def get_conversion(self, attr_name):
+        try:
+            return self.__color_registry[attr_name]
+        except KeyError:
+            cls = type(self)
+            metacls = type(cls)
+            try:
+                class_name = metacls.__class_registry[attr_name]
+            except KeyError:
+                return super().__getattr__(attr_name)
+            all_classes = dict(
+                inspect.getmembers(
+                    sys.modules.get(__name__, sys.modules['colors.base']),
+                    inspect.isclass
+                )
+            )
+            try:
+                color_class = all_classes[class_name]
+            except KeyError:
+                return super().__getattr__(attr_name)
+            self.__color_registry[attr_name] = colormath.color_conversions.convert_color(
+                self,
+                color_class
+            )
+            return self.__color_registry[attr_name]
+        
+    def __prepare__(metacls, name, bases, attr_name, **kwds):
+        metacls.__class_registry[attr_name] = name
+        namespace = {
+            f'_{metacls.__name__}__color_registry': {},
+            '__getattr__': metacls.get_conversion,
+        }
+        return namespace
         
     def __call__(cls, *args, **kwargs):
         sig = inspect.signature(cls.__new__)
@@ -29,220 +66,30 @@ class ColorMeta(type):
             return cls.instances[arguments]
 
 
-class sRGBColor(colormath.color_objects.sRGBColor, metaclass=ColorMeta):
+class sRGBColor(colormath.color_objects.sRGBColor, metaclass=ColorMeta, attr_name='srgb'):
     """Class that defines a red/green/blue (RGB) color."""
-    @property
-    def hsv(self) -> 'HSVColor':
-        """HSV translation of this color."""
-        self.__hsv: HSVColor
-        try:
-            return self.__hsv
-        except AttributeError:
-            self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
-            return self.__hsv
-
-    @property
-    def hsl(self) -> 'HSLColor':
-        """HSL translation of this color."""
-        self.__hsl: HSLColor
-        try:
-            return self.__hsl
-        except AttributeError:
-            self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
-            return self.__hsl
-        
-    @property
-    def lab(self) -> 'LabColor':
-        """CIE Lab translation of this color."""
-        self.__lab: LabColor
-        try:
-            return self.__lab
-        except AttributeError:
-            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
-            return self.__lab
-        
-    @property
-    def lab(self) -> 'LCHabColor':
-        """CIE LCH through CIE Lab translation of this color."""
-        self.__lchab: LCHabColor
-        try:
-            return self.__lchab
-        except AttributeError:
-            self.__lchab = colormath.color_conversions.convert_color(self, LCHabColor)
-            return self.__lchab
+    pass
 
 
-class HSVColor(colormath.color_objects.HSVColor, metaclass=ColorMeta):
+class HSVColor(colormath.color_objects.HSVColor, metaclass=ColorMeta, attr_name='hsv'):
     """Class that defines a hue/saturation/value (HSV) color."""
-
-    @property
-    def srgb(self) -> 'sRGBColor':
-        """RGB translation of this color."""
-        self.__srgb: sRGBColor
-        try:
-            return self.__srgb
-        except AttributeError:
-            self.__srgb = colormath.color_conversions.convert_color(self, sRGBColor)
-            return self.__srgb
-
-    @property
-    def hsl(self) -> 'HSLColor':
-        """HSL translation of this color."""
-        self.__hsl: HSLColor
-        try:
-            return self.__hsl
-        except AttributeError:
-            self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
-            return self.__hsl
-        
-    @property
-    def lab(self) -> 'LabColor':
-        """CIE Lab translation of this color."""
-        self.__lab: LabColor
-        try:
-            return self.__lab
-        except AttributeError:
-            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
-            return self.__lab
-        
-    @property
-    def lab(self) -> 'LCHabColor':
-        """CIE LCH through CIE Lab translation of this color."""
-        self.__lchab: LCHabColor
-        try:
-            return self.__lchab
-        except AttributeError:
-            self.__lchab = colormath.color_conversions.convert_color(self, LCHabColor)
-            return self.__lchab
+    pass
 
 
-class HSLColor(colormath.color_objects.HSLColor, metaclass=ColorMeta):
+class HSLColor(colormath.color_objects.HSLColor, metaclass=ColorMeta, attr_name='hsl'):
     """Class that defines a hue/saturation/lightness (HSL) color."""
-    @property
-    def srgb(self) -> 'sRGBColor':
-        """sRGB translation of this color."""
-        self.__srgb: sRGBColor
-        try:
-            return self.__srgb
-        except AttributeError:
-            self.__srgb = colormath.color_conversions.convert_color(self, sRGBColor)
-            return self.__srgb
-
-    @property
-    def hsv(self) -> 'HSVColor':
-        """HSV translation of this color."""
-        self.__hsv: HSVColor
-        try:
-            return self.__hsv
-        except AttributeError:
-            self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
-            return self.__hsv
-        
-    @property
-    def lab(self) -> 'LabColor':
-        """CIE Lab translation of this color."""
-        self.__lab: LabColor
-        try:
-            return self.__lab
-        except AttributeError:
-            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
-            return self.__lab
-        
-    @property
-    def lab(self) -> 'LCHabColor':
-        """CIE LCH through CIE Lab translation of this color."""
-        self.__lchab: LCHabColor
-        try:
-            return self.__lchab
-        except AttributeError:
-            self.__lchab = colormath.color_conversions.convert_color(self, LCHabColor)
-            return self.__lchab
+    pass
 
 
-class LabColor(colormath.color_objects.LabColor, metaclass=ColorMeta):
+class LabColor(colormath.color_objects.LabColor, metaclass=ColorMeta, attr_name='lab'):
     """Class that represents a CIE Lab color."""
-    @property
-    def srgb(self) -> 'sRGBColor':
-        """sRGB translation of this color."""
-        self.__srgb: sRGBColor
-        try:
-            return self.__srgb
-        except AttributeError:
-            self.__srgb = colormath.color_conversions.convert_color(self, sRGBColor)
-            return self.__srgb
-
-    @property
-    def hsv(self) -> 'HSVColor':
-        """HSV translation of this color."""
-        self.__hsv: HSVColor
-        try:
-            return self.__hsv
-        except AttributeError:
-            self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
-            return self.__hsv
-        
-    @property
-    def hsl(self) -> 'HSLColor':
-        """HSL translation of this color."""
-        self.__hsl: HSLColor
-        try:
-            return self.__hsl
-        except AttributeError:
-            self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
-            return self.__hsl
-        
-    @property
-    def lab(self) -> 'LCHabColor':
-        """CIE LCH through CIE Lab translation of this color."""
-        self.__lchab: LCHabColor
-        try:
-            return self.__lchab
-        except AttributeError:
-            self.__lchab = colormath.color_conversions.convert_color(self, LCHabColor)
-            return self.__lchab
+    pass
 
 
-class LCHabColor(colormath.color_objects.LCHabColor, metaclass=ColorMeta):
+class LCHabColor(colormath.color_objects.LCHabColor, metaclass=ColorMeta, attr_name='lchab'):
     """Class that represents a CIE LCH color converted by passing through CIE Lab."""
-    @property
-    def srgb(self) -> 'sRGBColor':
-        """sRGB translation of this color."""
-        self.__srgb: sRGBColor
-        try:
-            return self.__srgb
-        except AttributeError:
-            self.__srgb = colormath.color_conversions.convert_color(self, sRGBColor)
-            return self.__srgb
+    pass
 
-    @property
-    def hsv(self) -> 'HSVColor':
-        """HSV translation of this color."""
-        self.__hsv: HSVColor
-        try:
-            return self.__hsv
-        except AttributeError:
-            self.__hsv = colormath.color_conversions.convert_color(self, HSVColor)
-            return self.__hsv
-        
-    @property
-    def hsl(self) -> 'HSLColor':
-        """HSL translation of this color."""
-        self.__hsl: HSLColor
-        try:
-            return self.__hsl
-        except AttributeError:
-            self.__hsl = colormath.color_conversions.convert_color(self, HSLColor)
-            return self.__hsl
-        
-    @property
-    def lab(self) -> 'LabColor':
-        """CIE Lab translation of this color."""
-        self.__lab: LabColor
-        try:
-            return self.__lab
-        except AttributeError:
-            self.__lab = colormath.color_conversions.convert_color(self, LabColor)
-            return self.__lab
 
 class ColorGroup(enum.Enum):
     """
