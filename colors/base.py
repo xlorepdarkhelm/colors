@@ -9,7 +9,7 @@ import colormath
 
 class ColorMeta(type):
     __class_registry = {}
-    
+
     @property
     def instances(cls):
         try:
@@ -44,7 +44,7 @@ class ColorMeta(type):
                 color_class
             )
             return self.__color_registry[attr_name]
-        
+
     def __prepare__(metacls, name, bases, attr_name, **kwds):
         metacls.__class_registry[attr_name] = name
         namespace = {
@@ -52,7 +52,7 @@ class ColorMeta(type):
             '__getattr__': metacls.get_conversion,
         }
         return namespace
-        
+
     def __call__(cls, *args, **kwargs):
         sig = inspect.signature(cls.__new__)
         ba = sig.bind(*args, **kwargs)
