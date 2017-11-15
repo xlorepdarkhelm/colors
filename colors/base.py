@@ -3,11 +3,11 @@
 import enum
 import functools
 import inspect
-import sys
 import typing
 
 import colormath
 import colormath.color_objects
+import colormath.color_conversions
 
 
 class ColorMeta(type):
@@ -23,41 +23,29 @@ class ColorMeta(type):
 
     @staticmethod
     def get_conversion(self, attr_name):
-        try:
-            return self.__color_registry[attr_name]
-        except KeyError:
-            cls = type(self)
-            metacls = type(cls)
+        cls = type(self)
+        metacls = type(cls)
+        if attr_name in metacls.__class_registry:
+            attrs = vars(self)
             try:
-                class_name = metacls.__class_registry[attr_name]
+                return attrs[attr_name]
             except KeyError:
-                return getattr(
-                    super(cls, self),
-                    '__getattr__',
-                    super(cls, self).__getattribute__
-                )(attr_name)
-            all_classes = dict(
-                inspect.getmembers(
-                    sys.modules.get(__name__, sys.modules['colors.base']),
-                    inspect.isclass
-                )
-            )
-            try:
-                color_class = all_classes[class_name]
-            except KeyError:
-                return super().__getattr__(attr_name)
-            self.__color_registry[attr_name] = \
-                colormath.color_conversions.convert_color(
+                color_class = metacls.__class_registry[attr_name]
+                attr_val = colormath.color_conversions.convert_color(
                     self,
                     color_class
                 )
-            return self.__color_registry[attr_name]
+                attrs[attr_name] = attr_val
+                return attrs[attr_name]
+        else:
+            return super(cls, self).__getattribute__(attr_name)
 
     def __new__(metacls, name, bases, ns, attr_name, **kwds):
         try:
             return metacls.__class_registry[attr_name]
         except KeyError:
             ns[f'_{metacls.__name__}__color_registry'] = {}
+            ns['__getattribute__'] = metacls.get_conversion
             metacls.__class_registry[attr_name] = super().__new__(
                 metacls,
                 name,
@@ -74,8 +62,13 @@ class ColorMeta(type):
         try:
             return cls.instances[arguments]
         except KeyError:
-            cls.instances[arguments] = cls.__new__(cls, *args, **kwargs)
+            cls.instances[arguments] = super(type(cls), cls).__call__(
+                *args,
+                **kwargs
+            )
             return cls.instances[arguments]
+
+def add_meta(cls, attr_name):
 
 
 class sRGBColor(
@@ -85,6 +78,9 @@ class sRGBColor(
 ):
     """Class that defines a red/green/blue (RGB) color."""
     pass
+
+
+RGBColor = functools.partial(sRGBColor, is_upscaled=True)
 
 
 class HSVColor(
