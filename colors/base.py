@@ -30,12 +30,16 @@ class ColorMeta(type):
             try:
                 return attrs[attr_name]
             except KeyError:
-                color_class = metacls.__class_registry[attr_name]
-                attr_val = colormath.color_conversions.convert_color(
-                    self,
+                attr_class = metacls.__class_registry[attr_name]
+                color_class = getattr(
+                    colormath.color_objects,
+                    attr_class.__name__
+                )
+                color_val = colormath.color_conversions.convert_color(
+                    self._color,
                     color_class
                 )
-                attrs[attr_name] = attr_val
+                attrs[attr_name] = attr_class(color_val)
                 return attrs[attr_name]
         else:
             return super(cls, self).__getattribute__(attr_name)
@@ -68,28 +72,146 @@ class ColorMeta(type):
             )
             return cls.instances[arguments]
 
-def add_meta(cls, attr_name):
+
+class BaseColor:
+    def __init__(self, color: colormath.color_objects.ColorBase) -> None:
+        self._color = color
+        self.__values: typing.Dict[str, typing.Any] = {}
+
+    def _get_value(self, name, function=False):
+        try:
+            return self.__values[name]
+        except KeyError:
+            orig = getattr(self._color, name)
+            if function:
+                self.__values[name] = orig()
+            else:
+                print(name, orig)
+                self.__values[name] = orig
+            return self.__values[name]
 
 
 class sRGBColor(
-    colormath.color_objects.sRGBColor,
+    BaseColor,
     metaclass=ColorMeta,
     attr_name='srgb'
 ):
     """Class that defines a red/green/blue (RGB) color."""
-    pass
+
+    @property
+    def red(self):
+        try:
+            return self.__red
+        except AttributeError:
+            self.__red = int(self.clamped_red * 255)
+            return self.__red
+
+    @property
+    def green(self):
+        try:
+            return self.__green
+        except AttributeError:
+            self.__green = int(self.clamped_green * 255)
+            return self.__green
+
+    @property
+    def blue(self):
+        try:
+            return self.__blue
+        except AttributeError:
+            self.__blue = int(self.clamped_blue * 255)
+            return self.__blue
+
+    @property
+    def hex(self):
+        return self._get_value('get_rgb_hex', function=True)
+
+    @property
+    def upscaled_value_tuple(self):
+        return self._get_value('get_upscaled_value_tuple', function=True)
+
+    @property
+    def value_tuple(self):
+        return self._get_value('get_value_tuple', function=True)
+
+    @classmethod
+    def from_hex(cls, hex_str: str) -> 'sRGBColor':
+        return cls(
+            colormath.color_objects.sRGBColor.new_from_rgb_hex(hex_str)
+        )
+
+    @property
+    def clamped_red(self):
+        return self._get_value('rgb_r')
+
+    @property
+    def clamped_green(self):
+        return self._get_value('rgb_g')
+
+    @property
+    def clamped_blue(self):
+        return self._get_value('rgb_b')
+
+    @property
+    def native_illuminant(self):
+        return self._get_value('native_illuminant')
+
+    @property
+    def gamma(self):
+        return self._get_value('rgb_gamma')
+
+    def __repr__(self):
+        return f'RGB <red={self.red}, green={self.green}, blue={self.blue}>'
 
 
-RGBColor = functools.partial(sRGBColor, is_upscaled=True)
+def RGBColor(red: int, green: int, blue: int) -> sRGBColor:
+    return sRGBColor(
+        colormath.color_objects.sRGBColor(red, green, blue, is_upscaled=True)
+    )
 
 
 class HSVColor(
-    colormath.color_objects.HSVColor,
+    BaseColor,
     metaclass=ColorMeta,
     attr_name='hsv'
 ):
     """Class that defines a hue/saturation/value (HSV) color."""
-    pass
+
+    @property
+    def hue(self):
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = int(self.clamped_hue * 360)
+            return self.__hue
+
+    @property
+    def saturation(self):
+        try:
+            return self.__saturation
+        except AttributeError:
+            self.__saturation = int(self.clamped_saturation * 100)
+            return self.__saturation
+
+    @property
+    def value(self):
+        try:
+            return self.__value
+        except AttributeError:
+            self.__value = int(self.clamped_value * 100)
+            return self.__value
+
+    @property
+    def clamped_hue(self):
+        return self._get_value('hsv_h')
+
+    @property
+    def clamped_saturation(self):
+        return self._get_value('hsv_s')
+
+    @property
+    def clamped_value(self):
+        return self._get_value('hsv_v')
 
 
 class HSLColor(
