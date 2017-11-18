@@ -6,3 +6,5 @@ The primary concept for this is to be able to use a named color defined from som
 I am relying on the colormath module to provide the color types, which also then provides me a convenient better distance (delta E) calculation to use for the color conversions.
 
 I tend to write code in Python 3.6. There might be some parts of the code that do not work in Python versions lower than that without tweaks I may eventually make it more universal.... or not. Not sure yet.
+
+I have discovered the colormath library which handles almost all of my needs. However I still want to organize specialized color groups and use those. My purpose being to be able to translate a color from one group to the closest match of another group, and make each group be useful in the context it is intended.
