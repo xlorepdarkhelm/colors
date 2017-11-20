@@ -1421,8 +1421,3 @@ class ColorGroup(enum.Enum, metaclass=ColorGroupMeta):
     def value_tuple(self) -> typing.Tuple[int, int, int]:
         """Get the tuple containing (red, green, blue)."""
         return self.value.value_tuple
-
-    @property
-    def _BaseColor__color(self) -> colormath.color_objects.ColorBase:
-        """Get the colormath object assoeciated with this color."""
-        return self.value._BaseColor__color
