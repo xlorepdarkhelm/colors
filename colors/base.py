@@ -11,10 +11,18 @@ import colormath.color_conversions
 
 
 class ColorMeta(type):
+    """
+    Metaclass for colors that sets up class and instance registries.
+
+    This provides needed components for simple translation properties for
+    colors.
+    """
+
     __class_registry: typing.Dict[str, type] = {}
 
     @property
     def instances(cls):
+        """Class-specific instance registry to flywheel instances."""
         try:
             return cls.__instances
         except AttributeError:
@@ -23,6 +31,7 @@ class ColorMeta(type):
 
     @staticmethod
     def get_conversion(self, attr_name):
+        """Handle conversions as necessary otherwise get attribute."""
         cls = type(self)
         metacls = type(cls)
         if attr_name in metacls.__class_registry:
@@ -45,6 +54,7 @@ class ColorMeta(type):
             return super(cls, self).__getattribute__(attr_name)
 
     def __new__(metacls, name, bases, ns, attr_name, **kwds):
+        """Create new class definition."""
         try:
             return metacls.__class_registry[attr_name]
         except KeyError:
@@ -59,6 +69,7 @@ class ColorMeta(type):
             return metacls.__class_registry[attr_name]
 
     def __call__(cls, *args, **kwargs):
+        """Hijack instance creation for flywheeling."""
         sig = inspect.signature(cls.__new__)
         ba = sig.bind(*args, **kwargs)
         ba.apply_defaults()
@@ -74,15 +85,20 @@ class ColorMeta(type):
 
 
 class BaseColor:
+    """Base class for color classes."""
+
     def __init__(self, color: colormath.color_objects.ColorBase) -> None:
+        """Initialize with a given colormath object instance."""
         self.__color = color
         self.__values: typing.Dict[str, typing.Any] = {}
 
     @property
     def _color(self) -> colormath.color_objects.ColorBase:
+        """Get the colormath object this color is connected to."""
         return self.__color
 
     def _get_value(self, name, function=False) -> typing.Any:
+        """Get a specific value from the colormath object."""
         try:
             return self.__values[name]
         except KeyError:
@@ -103,105 +119,88 @@ class sRGBColor(
 
     @property
     def red(self) -> int:
+        """Get the red color level (0-255)."""
         self.__red: int
         try:
             return self.__red
         except AttributeError:
-            self.__red = int(self.clamped_red * 255)
+            self.__red = int(self._color.clamped_r * 255)
             return self.__red
 
     @property
     def r(self) -> int:
+        """Get the red color level (0-255)."""
         self.__red: int
         try:
             return self.__red
         except AttributeError:
-            self.__red = int(self.clamped_red * 255)
+            self.__red = int(self._color.clamped_r * 255)
             return self.__red
 
     @property
     def green(self) -> int:
+        """Get the green color level (0-255)."""
         self.__green: int
         try:
             return self.__green
         except AttributeError:
-            self.__green = int(self.clamped_green * 255)
+            self.__green = int(self._color.clamped_g * 255)
             return self.__green
 
     @property
     def g(self) -> int:
+        """Get the green color level (0-255)."""
         self.__green: int
         try:
             return self.__green
         except AttributeError:
-            self.__green = int(self.clamped_green * 255)
+            self.__green = int(self._color.clamped_g * 255)
             return self.__green
 
     @property
     def blue(self) -> int:
+        """Get the blue color level (0-255)."""
         self.__blue: int
         try:
             return self.__blue
         except AttributeError:
-            self.__blue = int(self.clamped_blue * 255)
+            self.__blue = int(self._color.clamped_b * 255)
             return self.__blue
 
     @property
     def b(self) -> int:
+        """Get the blue color level (0-255)."""
         self.__blue: int
         try:
             return self.__blue
         except AttributeError:
-            self.__blue = int(self.clamped_blue * 255)
+            self.__blue = int(self._color.clamped_b * 255)
             return self.__blue
 
     @property
     def hex(self) -> str:
+        """Get the html 6-digit hex code (#rrggbb)."""
         return self._get_value('get_rgb_hex', function=True)
 
     @property
     def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (red, green, blue)."""
         return self._get_value('get_upscaled_value_tuple', function=True)
-
-    @property
-    def clamped_value_tuple(self) -> typing.Tuple[float, float, float]:
-        return self._get_value('get_value_tuple', function=True)
 
     @classmethod
     def from_hex(cls, hex_str: str) -> 'sRGBColor':
+        """Convert a 6-digit hex code into a new sRGBColor object."""
         return cls(
             colormath.color_objects.sRGBColor.new_from_rgb_hex(hex_str)
         )
 
-    @property
-    def clamped_red(self) -> float:
-        return self._get_value('rgb_r')
-
-    @property
-    def clamped_green(self) -> float:
-        return self._get_value('rgb_g')
-
-    @property
-    def clamped_blue(self) -> float:
-        return self._get_value('rgb_b')
-
-    @property
-    def native_illuminant(self) -> str:
-        return self._get_value('native_illuminant')
-
-    @property
-    def gamma(self) -> float:
-        return self._get_value('rgb_gamma')
-
     def __repr__(self) -> str:
-        return ', '.join((
-            f'<sRGBColor(red={self.red}',
-            f'green={self.green}',
-            f'blue={self.blue})>'
-        ))
+        """Get the string representation of the sRGBColor instance."""
+        return '<sRGBColor(r={self.r}, g={self.g}, b={self.b})>'
 
 
 def RGBColor(red: int, green: int, blue: int) -> sRGBColor:
+    """Create sRGBColor instance for use in a Color Group."""
     return sRGBColor(
         colormath.color_objects.sRGBColor(red, green, blue, is_upscaled=True)
     )
@@ -216,60 +215,67 @@ class HSVColor(
 
     @property
     def hue(self) -> int:
+        """Get the color's hue angle (0-360)."""
         self.__hue: int
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self.clamped_hue * 360)
+            self.__hue = int(self._color.hsv_h * 360)
             return self.__hue
 
     @property
     def h(self) -> int:
+        """Get the color's hue angle (0-360)."""
         self.__hue: int
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self.clamped_hue * 360)
+            self.__hue = int(self._color.hsv_h * 360)
             return self.__hue
 
     @property
     def saturation(self) -> int:
+        """Get the color's saturation level (0-100)."""
         self.__saturation: int
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self.clamped_saturation * 100)
+            self.__saturation = int(self._color.hsv_s * 100)
             return self.__saturation
 
     @property
     def s(self) -> int:
+        """Get the color's saturation level (0-100)."""
         self.__saturation: int
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self.clamped_saturation * 100)
+            self.__saturation = int(self._color.hsv_s * 100)
             return self.__saturation
 
     @property
     def value(self) -> int:
+        """Get the color's value level (0-100)."""
         self.__value: int
         try:
             return self.__value
         except AttributeError:
-            self.__value = int(self.clamped_value * 100)
+            self.__value = int(self._color.hsv_v * 100)
             return self.__value
 
     @property
     def v(self) -> int:
+        """Get the color's value level (0-100)."""
         self.__value: int
         try:
             return self.__value
         except AttributeError:
-            self.__value = int(self.clamped_value * 100)
+            self.__value = int(self._color.hsv_v * 100)
             return self.__value
 
     @property
     def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (hue, saturation, value)."""
         self.__value_tuple: typing.Tuple[int, int, int]
         try:
             return self.__value_tuple
@@ -277,28 +283,9 @@ class HSVColor(
             self.__value_tuple = (self.hue, self.saturation, self.value)
             return self.__value_tuple
 
-    @property
-    def clamped_value_tuple(self) -> typing.Tuple[float, float, float]:
-        return self._get_value('get_value_tuple', function=True)
-
-    @property
-    def clamped_hue(self) -> float:
-        return self._get_value('hsv_h')
-
-    @property
-    def clamped_saturation(self) -> float:
-        return self._get_value('hsv_s')
-
-    @property
-    def clamped_value(self) -> float:
-        return self._get_value('hsv_v')
-
     def __repr__(self) -> str:
-        return ', '.join((
-            f'<HSVColor(hue={self.hue}',
-            f'saturation={self.saturation}',
-            f'value={self.value})>'
-        ))
+        """Get the string representation of the HSVColor instance."""
+        return f'<HSVColor(h={self.h}, s={self.s}, v={self.v})>'
 
 
 class HSLColor(
@@ -310,33 +297,67 @@ class HSLColor(
 
     @property
     def hue(self) -> int:
+        """Get the color's hue angle (0-360)."""
         self.__hue: int
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self.clamped_hue * 360)
+            self.__hue = int(self._color.hsl_h * 360)
+            return self.__hue
+
+    @property
+    def h(self) -> int:
+        """Get the color's hue angle (0-360)."""
+        self.__hue: int
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = int(self._color.hsl_h * 360)
             return self.__hue
 
     @property
     def saturation(self) -> int:
+        """Get the color's saturation level (0-100)."""
         self.__saturation: int
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self.clamped_saturation * 100)
+            self.__saturation = int(self._color.hsl_s * 100)
+            return self.__saturation
+
+    @property
+    def s(self) -> int:
+        """Get the color's saturation level (0-100)."""
+        self.__saturation: int
+        try:
+            return self.__saturation
+        except AttributeError:
+            self.__saturation = int(self._color.hsl_s * 100)
             return self.__saturation
 
     @property
     def lightness(self) -> int:
+        """Get the color's lighness level (0-100)."""
         self.__lightness: int
         try:
             return self.__lightness
         except AttributeError:
-            self.__lightness = int(self.clamped_lightness * 100)
+            self.__lightness = int(self._color.hsl_l * 100)
+            return self.__lightness
+
+    @property
+    def l_(self) -> int:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: int
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = int(self._color.hsl_l * 100)
             return self.__lightness
 
     @property
     def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (hue, saturation, llightness)."""
         self.__value_tuple: typing.Tuple[int, int, int]
         try:
             return self.__value_tuple
@@ -344,28 +365,9 @@ class HSLColor(
             self.__value_tuple = (self.hue, self.saturation, self.lightness)
             return self.__value_tuple
 
-    @property
-    def clamped_value_tuple(self) -> typing.Tuple[float, float, float]:
-        return self._get_value('get_value_tuple', function=True)
-
-    @property
-    def clamped_hue(self) -> float:
-        return self._get_value('hsl_h')
-
-    @property
-    def clamped_saturation(self) -> float:
-        return self._get_value('hsl_s')
-
-    @property
-    def clamped_lightness(self) -> float:
-        return self._get_value('hsl_l')
-
     def __repr__(self) -> str:
-        return ', '.join((
-            f'<HSLColor(hue={self.hue}',
-            f'saturation={self.saturation}',
-            f'lightness={self.lightness})>'
-        ))
+        """Get the string representation of the HSLColor instance."""
+        return '<HSLColor(h={self.h}, s={self.s}, l={self.l_})>'
 
 
 # class LabColor(
@@ -387,11 +389,15 @@ class HSLColor(
 
 
 class ColorGroupMeta(enum.EnumMeta):
+    """Metaclass for Color Groups."""
+
     @staticmethod
     def get_conv_attr(self, name):
+        """Get attribute for conversion from the enum value."""
         return getattr(self.value, name)
 
     def __new__(metacls, name, bases, ns):
+        """Add all conversion properties to the new instance."""
         for attr_name in ColorMeta._ColorMeta__class_registry:
             ns[attr_name] = property(
                 functools.partial(
@@ -443,56 +449,40 @@ class ColorGroup(enum.Enum, metaclass=ColorGroupMeta):
 
     @property
     def red(self) -> int:
+        """Get the red color level (0-255)."""
         return self.value.red
 
     @property
     def r(self) -> int:
+        """Get the red color level (0-255)."""
         return self.value.r
 
     @property
     def green(self) -> int:
+        """Get the green color level (0-255)."""
         return self.value.green
 
     @property
     def g(self) -> int:
+        """Get the green color level (0-255)."""
         return self.value.g
 
     @property
     def blue(self) -> int:
+        """Get the blue color level (0-255)."""
         return self.value.blue
 
     @property
     def b(self) -> int:
+        """Get the blue color level (0-255)."""
         return self.value.b
 
     @property
     def hex(self) -> str:
+        """Get the html 6-digit hex code (#rrggbb)."""
         return self.value.hex
 
     @property
     def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (red, green, blue)."""
         return self.value.value_tuple
-
-    @property
-    def clamped_value_tuple(self) -> typing.Tuple[float, float, float]:
-        return self.value.clamped_value_tuple
-
-    @property
-    def clamped_red(self) -> float:
-        return self.value.clamped_red
-
-    @property
-    def clamped_green(self) -> float:
-        return self.value.clamped_green
-
-    @property
-    def clamped_blue(self) -> float:
-        return self.value.clamped_blue
-
-    @property
-    def native_illuminant(self) -> str:
-        return self.value.native_illuminant
-
-    @property
-    def gamma(self) -> float:
-        return self.value.gamma
