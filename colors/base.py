@@ -45,7 +45,7 @@ class ColorMeta(type):
                     attr_class.__name__
                 )
                 color_val = colormath.color_conversions.convert_color(
-                    self._color,
+                    self._BaseColor__color,
                     color_class
                 )
                 attrs[attr_name] = attr_class(color_val)
@@ -92,17 +92,12 @@ class BaseColor:
         self.__color = color
         self.__values: typing.Dict[str, typing.Any] = {}
 
-    @property
-    def _color(self) -> colormath.color_objects.ColorBase:
-        """Get the colormath object this color is connected to."""
-        return self.__color
-
     def _get_value(self, name, function=False) -> typing.Any:
         """Get a specific value from the colormath object."""
         try:
             return self.__values[name]
         except KeyError:
-            orig = getattr(self._color, name)
+            orig = getattr(self.__color, name)
             if function:
                 self.__values[name] = orig()
             else:
@@ -124,7 +119,7 @@ class sRGBColor(
         try:
             return self.__red
         except AttributeError:
-            self.__red = int(self._color.clamped_r * 255)
+            self.__red = int(self._get_value('rgb_r') * 255)
             return self.__red
 
     @property
@@ -134,7 +129,7 @@ class sRGBColor(
         try:
             return self.__red
         except AttributeError:
-            self.__red = int(self._color.clamped_r * 255)
+            self.__red = int(self._get_value('rgb_r') * 255)
             return self.__red
 
     @property
@@ -144,7 +139,7 @@ class sRGBColor(
         try:
             return self.__green
         except AttributeError:
-            self.__green = int(self._color.clamped_g * 255)
+            self.__green = int(self._get_value('rgb_g') * 255)
             return self.__green
 
     @property
@@ -154,7 +149,7 @@ class sRGBColor(
         try:
             return self.__green
         except AttributeError:
-            self.__green = int(self._color.clamped_g * 255)
+            self.__green = int(self._get_value('rgb_g') * 255)
             return self.__green
 
     @property
@@ -164,7 +159,7 @@ class sRGBColor(
         try:
             return self.__blue
         except AttributeError:
-            self.__blue = int(self._color.clamped_b * 255)
+            self.__blue = int(self._get_value('rgb_b') * 255)
             return self.__blue
 
     @property
@@ -174,7 +169,7 @@ class sRGBColor(
         try:
             return self.__blue
         except AttributeError:
-            self.__blue = int(self._color.clamped_b * 255)
+            self.__blue = int(self._get_value('rgb_b') * 255)
             return self.__blue
 
     @property
@@ -196,7 +191,7 @@ class sRGBColor(
 
     def __repr__(self) -> str:
         """Get the string representation of the sRGBColor instance."""
-        return '<sRGBColor(r={self.r}, g={self.g}, b={self.b})>'
+        return f'<sRGBColor(r={self.r}, g={self.g}, b={self.b})>'
 
 
 def RGBColor(red: int, green: int, blue: int) -> sRGBColor:
@@ -220,7 +215,7 @@ class HSVColor(
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self._color.hsv_h * 360)
+            self.__hue = int(self._get_value('hsv_h'))
             return self.__hue
 
     @property
@@ -230,7 +225,7 @@ class HSVColor(
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self._color.hsv_h * 360)
+            self.__hue = int(self._get_value('hsv_h'))
             return self.__hue
 
     @property
@@ -240,7 +235,7 @@ class HSVColor(
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self._color.hsv_s * 100)
+            self.__saturation = int(self._get_value('hsv_s') * 100)
             return self.__saturation
 
     @property
@@ -250,7 +245,7 @@ class HSVColor(
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self._color.hsv_s * 100)
+            self.__saturation = int(self._get_value('hsv_s') * 100)
             return self.__saturation
 
     @property
@@ -260,7 +255,7 @@ class HSVColor(
         try:
             return self.__value
         except AttributeError:
-            self.__value = int(self._color.hsv_v * 100)
+            self.__value = int(self._get_value('hsv_v') * 100)
             return self.__value
 
     @property
@@ -270,7 +265,7 @@ class HSVColor(
         try:
             return self.__value
         except AttributeError:
-            self.__value = int(self._color.hsv_v * 100)
+            self.__value = int(self._get_value('hsv_v') * 100)
             return self.__value
 
     @property
@@ -302,7 +297,7 @@ class HSLColor(
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self._color.hsl_h * 360)
+            self.__hue = int(self._get_value('hsl_h'))
             return self.__hue
 
     @property
@@ -312,7 +307,7 @@ class HSLColor(
         try:
             return self.__hue
         except AttributeError:
-            self.__hue = int(self._color.hsl_h * 360)
+            self.__hue = int(self._get_value('hsl_h'))
             return self.__hue
 
     @property
@@ -322,7 +317,7 @@ class HSLColor(
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self._color.hsl_s * 100)
+            self.__saturation = int(self._get_value('hsl_s') * 100)
             return self.__saturation
 
     @property
@@ -332,7 +327,7 @@ class HSLColor(
         try:
             return self.__saturation
         except AttributeError:
-            self.__saturation = int(self._color.hsl_s * 100)
+            self.__saturation = int(self._get_value('hsl_s') * 100)
             return self.__saturation
 
     @property
@@ -342,7 +337,7 @@ class HSLColor(
         try:
             return self.__lightness
         except AttributeError:
-            self.__lightness = int(self._color.hsl_l * 100)
+            self.__lightness = int(self._get_value('hsl_l') * 100)
             return self.__lightness
 
     @property
@@ -352,12 +347,12 @@ class HSLColor(
         try:
             return self.__lightness
         except AttributeError:
-            self.__lightness = int(self._color.hsl_l * 100)
+            self.__lightness = int(self._get_value('hsl_l') * 100)
             return self.__lightness
 
     @property
     def value_tuple(self) -> typing.Tuple[int, int, int]:
-        """Get the tuple containing (hue, saturation, llightness)."""
+        """Get the tuple containing (hue, saturation, lightness)."""
         self.__value_tuple: typing.Tuple[int, int, int]
         try:
             return self.__value_tuple
@@ -367,25 +362,347 @@ class HSLColor(
 
     def __repr__(self) -> str:
         """Get the string representation of the HSLColor instance."""
-        return '<HSLColor(h={self.h}, s={self.s}, l={self.l_})>'
+        return f'<HSLColor(h={self.h}, s={self.s}, l={self.l_})>'
 
 
-# class LabColor(
-#     colormath.color_objects.LabColor,
-#     metaclass=ColorMeta,
-#     attr_name='lab'
-# ):
-#     """Class that represents a CIE Lab color."""
-#     pass
+class LabColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='lab'
+):
+    """Class that represents a CIE Lab color."""
+
+    @property
+    def lightness(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lab_l')
+            return self.__lightness
+
+    @property
+    def l_(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lab_l')
+            return self.__lightness
+
+    @property
+    def magenta_green(self) -> float:
+        """Get the color's magenta [+] / green [-] axis position."""
+        self.__magenta_green: float
+        try:
+            return self.__magenta_green
+        except AttributeError:
+            self.__magenta_green = self._get_value('lab_a')
+            return self.__magenta_green
+
+    @property
+    def a(self) -> float:
+        """Get the color's magenta [+] / green [-] axis position."""
+        self.__magenta_green: float
+        try:
+            return self.__magenta_green
+        except AttributeError:
+            self.__magenta_green = self._get_value('lab_a')
+            return self.__magenta_green
+
+    @property
+    def yellow_blue(self) -> float:
+        """Get the color's yellow [+] / blue [-] axis position."""
+        self.__yellow_blue: float
+        try:
+            return self.__yellow_blue
+        except AttributeError:
+            self.__yellow_blue = self._get_value('lab_b')
+            return self.__yellow_blue
+
+    @property
+    def b(self) -> float:
+        """Get the color's yellow [+] / blue [-] axis position."""
+        self.__yellow_blue: float
+        try:
+            return self.__yellow_blue
+        except AttributeError:
+            self.__yellow_blue = self._get_value('lab_b')
+            return self.__yellow_blue
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing (lightness, magenta_green, yellow_blue)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the LabColor instance."""
+        return f'<LabColor(l={self.l_}, a={self.a}, b={self.b})>'
 
 
-# class LCHabColor(
-#     colormath.color_objects.LCHabColor,
-#     metaclass=ColorMeta,
-#     attr_name='lchab'
-# ):
+class LuvColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='luv'
+):
+    """Class that represents a CIE Luv color."""
+
+    @property
+    def lightness(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('luv_l')
+            return self.__lightness
+
+    @property
+    def l_(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('luv_l')
+            return self.__lightness
+
+    @property
+    def u_axis(self) -> float:
+        """Get the color's u axis position (-100 - 100)."""
+        self.__u_axis: float
+        try:
+            return self.__u_axis
+        except AttributeError:
+            self.__u_axis = self._get_value('luv_u')
+            return self.__u_axis
+
+    @property
+    def u(self) -> float:
+        """Get the color's u axis position (-100 - 100)."""
+        self.__u_axis: float
+        try:
+            return self.__u_axis
+        except AttributeError:
+            self.__u_axis = self._get_value('luv_u')
+            return self.__u_axis
+
+    @property
+    def v_axis(self) -> float:
+        """Get the color's v axis position (-100 - 100)."""
+        self.__v_axis: float
+        try:
+            return self.__v_axis
+        except AttributeError:
+            self.__v_axis = self._get_value('luv_v')
+            return self.__v_axis
+
+    @property
+    def v(self) -> float:
+        """Get the color's v axis position (-100 - 100)."""
+        self.__v_axis: float
+        try:
+            return self.__v_axis
+        except AttributeError:
+            self.__v_axis = self._get_value('luv_v')
+            return self.__v_axis
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing (lightness, u_axis, yellow_blue)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the LuvColor instance."""
+        return f'<LuvColor(l={self.l_}, u={self.u}, v={self.v})>'
+
+
+class LCHabColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='lchab'
+):
     """Class that represents a CIE LCH color converted through CIE Lab."""
-    pass
+
+    @property
+    def lightness(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lch_l')
+            return self.__lightness
+
+    @property
+    def l_(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lch_l')
+            return self.__lightness
+
+    @property
+    def chroma(self) -> float:
+        """Get the color's chroma level (0-100)."""
+        self.__chroma: float
+        try:
+            return self.__chroma
+        except AttributeError:
+            self.__chroma = self._get_value('lch_c')
+            return self.__chroma
+
+    @property
+    def c(self) -> float:
+        """Get the color's chroma level (0-100)."""
+        self.__chroma: float
+        try:
+            return self.__chroma
+        except AttributeError:
+            self.__chroma = self._get_value('lch_c')
+            return self.__chroma
+
+    @property
+    def hue(self) -> float:
+        """Get the color's hue angle (0-360)."""
+        self.__hue: float
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = self._get_value('lch_h')
+            return self.__hue
+
+    @property
+    def h(self) -> float:
+        """Get the color's hue angle (0-360)."""
+        self.__hue: float
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = self._get_value('lch_h')
+            return self.__hue
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing (lightness, chroma, hue)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the LCHabColor instance."""
+        return f'<LCHabColor(l={self.l_}, c={self.c}, h={self.h})>'
+
+
+class LCHuvColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='lchuv'
+):
+    """Class that represents a CIE LCH color converted through CIE Luv."""
+
+    @property
+    def lightness(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lch_l')
+            return self.__lightness
+
+    @property
+    def l_(self) -> float:
+        """Get the color's lighness level (0-100)."""
+        self.__lightness: float
+        try:
+            return self.__lightness
+        except AttributeError:
+            self.__lightness = self._get_value('lch_l')
+            return self.__lightness
+
+    @property
+    def chroma(self) -> float:
+        """Get the color's chroma level (0-100)."""
+        self.__chroma: float
+        try:
+            return self.__chroma
+        except AttributeError:
+            self.__chroma = self._get_value('lch_c')
+            return self.__chroma
+
+    @property
+    def c(self) -> float:
+        """Get the color's chroma level (0-100)."""
+        self.__chroma: float
+        try:
+            return self.__chroma
+        except AttributeError:
+            self.__chroma = self._get_value('lch_c')
+            return self.__chroma
+
+    @property
+    def hue(self) -> float:
+        """Get the color's hue angle (0-360)."""
+        self.__hue: float
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = self._get_value('lch_h')
+            return self.__hue
+
+    @property
+    def h(self) -> float:
+        """Get the color's hue angle (0-360)."""
+        self.__hue: float
+        try:
+            return self.__hue
+        except AttributeError:
+            self.__hue = self._get_value('lch_h')
+            return self.__hue
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing (lightness, chroma, hue)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the LCHuvColor instance."""
+        return f'<LCHuvColor(l={self.l_}, c={self.c}, h={self.h})>'
 
 
 class ColorGroupMeta(enum.EnumMeta):
