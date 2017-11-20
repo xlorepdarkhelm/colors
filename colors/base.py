@@ -6,8 +6,9 @@ import inspect
 import typing
 
 import colormath
-import colormath.color_objects
 import colormath.color_conversions
+import colormath.color_diff
+import colormath.color_objects
 
 
 class ColorMeta(type):
@@ -705,6 +706,629 @@ class LCHuvColor(
         return f'<LCHuvColor(l={self.l_}, c={self.c}, h={self.h})>'
 
 
+class XYZColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='xyz'
+):
+    """Class that represents an XYZ color."""
+
+    @property
+    def x_coordinate(self) -> float:
+        """Get the color's x coordinate."""
+        self.__x_coordinate: float
+        try:
+            return self.__x_coordinate
+        except AttributeError:
+            self.__x_coordinate = self._get_value('xyz_x')
+            return self.__x_coordinate
+
+    @property
+    def x(self) -> float:
+        """Get the color's x coordinate."""
+        self.__x_coordinate: float
+        try:
+            return self.__x_coordinate
+        except AttributeError:
+            self.__x_coordinate = self._get_value('xyz_x')
+            return self.__x_coordinate
+
+    @property
+    def y_coordinate(self) -> float:
+        """Get the color's y coordinate."""
+        self.__y_coordinate: float
+        try:
+            return self.__y_coordinate
+        except AttributeError:
+            self.__y_coordinate = self._get_value('xyz_y')
+            return self.__y_coordinate
+
+    @property
+    def y(self) -> float:
+        """Get the color's y coordinate."""
+        self.__y_coordinate: float
+        try:
+            return self.__y_coordinate
+        except AttributeError:
+            self.__y_coordinate = self._get_value('xyz_y')
+            return self.__y_coordinate
+
+    @property
+    def z_coordinate(self) -> float:
+        """Get the color's z coordinate."""
+        self.__z_coordinate: float
+        try:
+            return self.__z_coordinate
+        except AttributeError:
+            self.__z_coordinate = self._get_value('xyz_z')
+            return self.__z_coordinate
+
+    @property
+    def z(self) -> float:
+        """Get the color's z coordinate."""
+        self.__z_coordinate: float
+        try:
+            return self.__z_coordinate
+        except AttributeError:
+            self.__z_coordinate = self._get_value('xyz_z')
+            return self.__z_coordinate
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing the (x, y, z) coordinates."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the XYZColor instance."""
+        return f'<XYZColor(x={self.x}, y={self.y}, z={self.z})>'
+
+
+class xyYColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='xyy'
+):
+    """Class that represents a CIE xyY color."""
+
+    @property
+    def x_coordinate(self) -> float:
+        """Get the color's x coordinate."""
+        self.__x_coordinate: float
+        try:
+            return self.__x_coordinate
+        except AttributeError:
+            self.__x_coordinate = self._get_value('xyy_x')
+            return self.__x_coordinate
+
+    @property
+    def x(self) -> float:
+        """Get the color's x coordinate."""
+        self.__x_coordinate: float
+        try:
+            return self.__x_coordinate
+        except AttributeError:
+            self.__x_coordinate = self._get_value('xyy_x')
+            return self.__x_coordinate
+
+    @property
+    def y_coordinate(self) -> float:
+        """Get the color's y coordinate."""
+        self.__y_coordinate: float
+        try:
+            return self.__y_coordinate
+        except AttributeError:
+            self.__y_coordinate = self._get_value('xyy_y')
+            return self.__y_coordinate
+
+    @property
+    def y(self) -> float:
+        """Get the color's y coordinate."""
+        self.__y_coordinate: float
+        try:
+            return self.__y_coordinate
+        except AttributeError:
+            self.__y_coordinate = self._get_value('xyy_y')
+            return self.__y_coordinate
+
+    @property
+    def luminance(self) -> float:
+        """Get the color's luminance level."""
+        self.__luminance: float
+        try:
+            return self.__luminance
+        except AttributeError:
+            self.__luminance = self._get_value('xyy_Y')
+            return self.__luminance
+
+    @property
+    def Y(self) -> float:
+        """Get the color's luminance level."""
+        self.__luminance: float
+        try:
+            return self.__luminance
+        except AttributeError:
+            self.__luminance = self._get_value('xyy_Y')
+            return self.__luminance
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing the (x coord, y coord, luminance)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the xyYColor instance."""
+        return f'<xyYColor(x={self.x}, y={self.y}, Y={self.Y})>'
+
+
+class AdobeRGBColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='adobe'
+):
+    """Class that represents an Adobe RGB color."""
+
+    @property
+    def red(self) -> int:
+        """Get the red color level (0-255)."""
+        self.__red: int
+        try:
+            return self.__red
+        except AttributeError:
+            self.__red = int(self._get_value('rgb_r') * 255)
+            return self.__red
+
+    @property
+    def r(self) -> int:
+        """Get the red color level (0-255)."""
+        self.__red: int
+        try:
+            return self.__red
+        except AttributeError:
+            self.__red = int(self._get_value('rgb_r') * 255)
+            return self.__red
+
+    @property
+    def green(self) -> int:
+        """Get the green color level (0-255)."""
+        self.__green: int
+        try:
+            return self.__green
+        except AttributeError:
+            self.__green = int(self._get_value('rgb_g') * 255)
+            return self.__green
+
+    @property
+    def g(self) -> int:
+        """Get the green color level (0-255)."""
+        self.__green: int
+        try:
+            return self.__green
+        except AttributeError:
+            self.__green = int(self._get_value('rgb_g') * 255)
+            return self.__green
+
+    @property
+    def blue(self) -> int:
+        """Get the blue color level (0-255)."""
+        self.__blue: int
+        try:
+            return self.__blue
+        except AttributeError:
+            self.__blue = int(self._get_value('rgb_b') * 255)
+            return self.__blue
+
+    @property
+    def b(self) -> int:
+        """Get the blue color level (0-255)."""
+        self.__blue: int
+        try:
+            return self.__blue
+        except AttributeError:
+            self.__blue = int(self._get_value('rgb_b') * 255)
+            return self.__blue
+
+    @property
+    def hex(self) -> str:
+        """Get the html 6-digit hex code (#rrggbb)."""
+        return self._get_value('get_rgb_hex', function=True)
+
+    @property
+    def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (red, green, blue)."""
+        return self._get_value('get_upscaled_value_tuple', function=True)
+
+    @classmethod
+    def from_hex(cls, hex_str: str) -> 'AdobeRGBColor':
+        """Convert a 6-digit hex code into a new AdobeRGBColor object."""
+        return cls(
+            colormath.color_objects.AdobeRGBColor.new_from_rgb_hex(hex_str)
+        )
+
+    def __repr__(self) -> str:
+        """Get the string representation of the AdobeRGBColor instance."""
+        return f'<AdobeRGBColor(r={self.r}, g={self.g}, b={self.b})>'
+
+
+class AppleRGBColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='apple'
+):
+    """Class that represents an Adobe RGB color."""
+
+    @property
+    def red(self) -> int:
+        """Get the red color level (0-255)."""
+        self.__red: int
+        try:
+            return self.__red
+        except AttributeError:
+            self.__red = int(self._get_value('rgb_r') * 255)
+            return self.__red
+
+    @property
+    def r(self) -> int:
+        """Get the red color level (0-255)."""
+        self.__red: int
+        try:
+            return self.__red
+        except AttributeError:
+            self.__red = int(self._get_value('rgb_r') * 255)
+            return self.__red
+
+    @property
+    def green(self) -> int:
+        """Get the green color level (0-255)."""
+        self.__green: int
+        try:
+            return self.__green
+        except AttributeError:
+            self.__green = int(self._get_value('rgb_g') * 255)
+            return self.__green
+
+    @property
+    def g(self) -> int:
+        """Get the green color level (0-255)."""
+        self.__green: int
+        try:
+            return self.__green
+        except AttributeError:
+            self.__green = int(self._get_value('rgb_g') * 255)
+            return self.__green
+
+    @property
+    def blue(self) -> int:
+        """Get the blue color level (0-255)."""
+        self.__blue: int
+        try:
+            return self.__blue
+        except AttributeError:
+            self.__blue = int(self._get_value('rgb_b') * 255)
+            return self.__blue
+
+    @property
+    def b(self) -> int:
+        """Get the blue color level (0-255)."""
+        self.__blue: int
+        try:
+            return self.__blue
+        except AttributeError:
+            self.__blue = int(self._get_value('rgb_b') * 255)
+            return self.__blue
+
+    @property
+    def hex(self) -> str:
+        """Get the html 6-digit hex code (#rrggbb)."""
+        return self._get_value('get_rgb_hex', function=True)
+
+    @property
+    def value_tuple(self) -> typing.Tuple[int, int, int]:
+        """Get the tuple containing (red, green, blue)."""
+        return self._get_value('get_upscaled_value_tuple', function=True)
+
+    @classmethod
+    def from_hex(cls, hex_str: str) -> 'AppleRGBColor':
+        """Convert a 6-digit hex code into a new AppleRGBColor object."""
+        return cls(
+            colormath.color_objects.AppleRGBColor.new_from_rgb_hex(hex_str)
+        )
+
+    def __repr__(self) -> str:
+        """Get the string representation of the AppleRGBColor instance."""
+        return f'<AppleRGBColor(r={self.r}, g={self.g}, b={self.b})>'
+
+
+class CMYColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='cmy'
+):
+    """Class that represents a CMY color."""
+
+    @property
+    def cyan(self) -> float:
+        """Get the cyan color level."""
+        self.__cyan: float
+        try:
+            return self.__cyan
+        except AttributeError:
+            self.__cyan = self._get_value('cmy_c')
+            return self.__cyan
+
+    @property
+    def c(self) -> float:
+        """Get the cyan color level."""
+        self.__cyan: float
+        try:
+            return self.__cyan
+        except AttributeError:
+            self.__cyan = self._get_value('cmy_c')
+            return self.__cyan
+
+    @property
+    def magenta(self) -> float:
+        """Get the magenta color level."""
+        self.__magenta: float
+        try:
+            return self.__magenta
+        except AttributeError:
+            self.__magenta = self._get_value('cmy_m')
+            return self.__magenta
+
+    @property
+    def m(self) -> float:
+        """Get the magenta color level."""
+        self.__magenta: float
+        try:
+            return self.__magenta
+        except AttributeError:
+            self.__magenta = self._get_value('cmy_m')
+            return self.__magenta
+
+    @property
+    def yellow(self) -> float:
+        """Get the yellow color level."""
+        self.__yellow: float
+        try:
+            return self.__yellow
+        except AttributeError:
+            self.__yellow = self._get_value('cmy_y')
+            return self.__yellow
+
+    @property
+    def y(self) -> float:
+        """Get the yellow color level."""
+        self.__yellow: float
+        try:
+            return self.__yellow
+        except AttributeError:
+            self.__yellow = self._get_value('cmy_y')
+            return self.__yellow
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing (cyan, magenta, yellow)."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the CMYColor instance."""
+        return f'<CMYColor(c={self.c}, m={self.m}, y={self.y})>'
+
+
+class CMYKColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='cmyk'
+):
+    """Class that represents a CMYK color."""
+
+    @property
+    def cyan(self) -> float:
+        """Get the cyan color level."""
+        self.__cyan: float
+        try:
+            return self.__cyan
+        except AttributeError:
+            self.__cyan = self._get_value('cmyk_c')
+            return self.__cyan
+
+    @property
+    def c(self) -> float:
+        """Get the cyan color level."""
+        self.__cyan: float
+        try:
+            return self.__cyan
+        except AttributeError:
+            self.__cyan = self._get_value('cmyk_c')
+            return self.__cyan
+
+    @property
+    def magenta(self) -> float:
+        """Get the magenta color level."""
+        self.__magenta: float
+        try:
+            return self.__magenta
+        except AttributeError:
+            self.__magenta = self._get_value('cmyk_m')
+            return self.__magenta
+
+    @property
+    def m(self) -> float:
+        """Get the magenta color level."""
+        self.__magenta: float
+        try:
+            return self.__magenta
+        except AttributeError:
+            self.__magenta = self._get_value('cmyk_m')
+            return self.__magenta
+
+    @property
+    def yellow(self) -> float:
+        """Get the yellow color level."""
+        self.__yellow: float
+        try:
+            return self.__yellow
+        except AttributeError:
+            self.__yellow = self._get_value('cmyk_y')
+            return self.__yellow
+
+    @property
+    def y(self) -> float:
+        """Get the yellow color level."""
+        self.__yellow: float
+        try:
+            return self.__yellow
+        except AttributeError:
+            self.__yellow = self._get_value('cmyk_y')
+            return self.__yellow
+
+    @property
+    def black(self) -> float:
+        """Get the black color level."""
+        self.__black: float
+        try:
+            return self.__black
+        except AttributeError:
+            self.__black = self._get_value('cmyk_k')
+            return self.__black
+
+    @property
+    def k(self) -> float:
+        """Get the black color level."""
+        self.__black: float
+        try:
+            return self.__black
+        except AttributeError:
+            self.__black = self._get_value('cmyk_k')
+            return self.__black
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float, float]:
+        """Get the tuple containing (cyan, magenta, yellow, black)."""
+        self.__value_tuple: typing.Tuple[float, float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the CMYKColor instance."""
+        return f'<CMYKColor(c={self.c}, m={self.m}, y={self.y}, k={self.k})>'
+
+
+class IPTColor(
+    BaseColor,
+    metaclass=ColorMeta,
+    attr_name='ipt'
+):
+    """Class that represents an IPT color."""
+
+    @property
+    def i_coordinate(self) -> float:
+        """Get the color's i coordinate."""
+        self.__i_coordinate: float
+        try:
+            return self.__i_coordinate
+        except AttributeError:
+            self.__i_coordinate = self._get_value('ipt_i')
+            return self.__i_coordinate
+
+    @property
+    def i(self) -> float:
+        """Get the color's i coordinate."""
+        self.__i_coordinate: float
+        try:
+            return self.__i_coordinate
+        except AttributeError:
+            self.__i_coordinate = self._get_value('ipt_i')
+            return self.__i_coordinate
+
+    @property
+    def p_coordinate(self) -> float:
+        """Get the color's p coordinate."""
+        self.__p_coordinate: float
+        try:
+            return self.__p_coordinate
+        except AttributeError:
+            self.__p_coordinate = self._get_value('ipt_p')
+            return self.__p_coordinate
+
+    @property
+    def p(self) -> float:
+        """Get the color's p coordinate."""
+        self.__p_coordinate: float
+        try:
+            return self.__p_coordinate
+        except AttributeError:
+            self.__p_coordinate = self._get_value('ipt_p')
+            return self.__p_coordinate
+
+    @property
+    def t_coordinate(self) -> float:
+        """Get the color's t coordinate."""
+        self.__t_coordinate: float
+        try:
+            return self.__t_coordinate
+        except AttributeError:
+            self.__t_coordinate = self._get_value('ipt_t')
+            return self.__t_coordinate
+
+    @property
+    def t(self) -> float:
+        """Get the color's t coordinate."""
+        self.__t_coordinate: float
+        try:
+            return self.__t_coordinate
+        except AttributeError:
+            self.__t_coordinate = self._get_value('ipt_t')
+            return self.__t_coordinate
+
+    @property
+    def value_tuple(self) -> typing.Tuple[float, float, float]:
+        """Get the tuple containing the (i, p, t) coordinates."""
+        self.__value_tuple: typing.Tuple[float, float, float]
+        try:
+            return self.__value_tuple
+        except AttributeError:
+            self.__value_tuple = self._get_value(
+                'get_value_tuple',
+                function=True
+            )
+            return self.__value_tuple
+
+    def __repr__(self) -> str:
+        """Get the string representation of the IPTColor instance."""
+        return f'<IPTColor(i={self.i}, p={self.p}, t={self.t})>'
+
+
 class ColorGroupMeta(enum.EnumMeta):
     """Metaclass for Color Groups."""
 
@@ -744,25 +1368,19 @@ class ColorGroup(enum.Enum, metaclass=ColorGroupMeta):
     @functools.lru_cache(maxsize=128)
     def closest(
         cls,
-        color: typing.Union['ColorGroup', sRGBColor]
+        color: typing.Union['ColorGroup', 'BaseColor']
     ) -> 'ColorGroup':
         """Find the closest match in this color group to the given color."""
-        try:
-            rgb = color.value  # type: ignore
-        except AttributeError:
-            rgb = color
-        try:
-            return cls(rgb)
-        except ValueError:
-            distances = {
-                sum((
-                    abs(item.value.red - rgb.red),
-                    abs(item.value.green - rgb.green),
-                    abs(item.value.blue - rgb.blue)
-                )): item
-                for item in reversed(cls)
-            }
-            return distances[min(distances.keys())]  # type: ignore
+        color_object = color.lab._BaseColor__color  # type: ignore
+
+        distances = {
+            colormath.color_diff.delta_e_cmc(
+                color_object,
+                item.lab._BaseColor__color  # type: ignore
+            ): item
+            for item in reversed(cls)
+        }
+        return distances[min(distances.keys())]  # type: ignore
 
     @property
     def red(self) -> int:
@@ -803,3 +1421,8 @@ class ColorGroup(enum.Enum, metaclass=ColorGroupMeta):
     def value_tuple(self) -> typing.Tuple[int, int, int]:
         """Get the tuple containing (red, green, blue)."""
         return self.value.value_tuple
+
+    @property
+    def _BaseColor__color(self) -> colormath.color_objects.ColorBase:
+        """Get the colormath object assoeciated with this color."""
+        return self.value._BaseColor__color
